@@ -7,24 +7,23 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <boost/any.hpp>
 
-#include "XmlDomDocument.h"
+#include "XmlDomDocument_T.h"
 #include "Note.h"
 #include "Rest.h"
 #include "Basis.h"
 
-class FRAGMENT {
+class Fragment_T {
 private:
-    XmlDomDocument* doc;
+    XmlDomDocument_T * doc;
     BASIS * basis;
-    std::vector<NOTE> * noteSamples;
-    std::vector<REST> * restSamples;
+    std::vector<Note_T> * noteSamples;
+    std::vector<Rest_T> * restSamples;
 
     //void GrabNotesAndRests();
 public:
-    FRAGMENT(const char* xmlFile);
-    ~FRAGMENT(){delete noteSamples; delete restSamples; delete basis;}
+    Fragment_T(const char* xmlFile);
+    ~Fragment_T(){delete noteSamples; delete restSamples; delete basis;}
 };
 
 

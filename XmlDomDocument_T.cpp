@@ -2,7 +2,7 @@
 // Created by Matthew McKay on 6/21/15.
 //
 
-#include "XmlDomDocument.h"
+#include "XmlDomDocument_T.h"
 
 xercesc::XercesDOMParser * parser = NULL;
 xercesc::ErrorHandler *    errorHandler = NULL;
@@ -13,24 +13,24 @@ void createParser()
     {
         xercesc::XMLPlatformUtils::Initialize();
         parser = new xercesc::XercesDOMParser();
-        errorHandler = (xercesc::ErrorHandler*) new XmlDomErrorHandler();
+        errorHandler = (xercesc::ErrorHandler*) new XmlDomErrorHandler_T();
         parser->setErrorHandler(errorHandler);
     }
 }
 
-XmlDomDocument::XmlDomDocument(const char * xmlfile) : m_doc(NULL)
+XmlDomDocument_T::XmlDomDocument_T(const char * xmlfile) : m_doc(NULL)
 {
     createParser();
     parser->parse(xmlfile);
     m_doc = parser->adoptDocument();
 }
 
-XmlDomDocument::~XmlDomDocument()
+XmlDomDocument_T::~XmlDomDocument_T()
 {
     if (m_doc) m_doc->release();
 }
 
-std::string XmlDomDocument::getChildValue(const char *parentTag, int parentIndex,
+std::string XmlDomDocument_T::getChildValue(const char *parentTag, int parentIndex,
                                           const char *childTag, int childIndex)
 {
     XMLCh * temp = xercesc::XMLString::transcode(parentTag);
@@ -53,7 +53,7 @@ std::string XmlDomDocument::getChildValue(const char *parentTag, int parentIndex
     return value;
 }
 
-std::string XmlDomDocument::getChildAttribute(const char *parentTag, int parentIndex,const char *childTag,
+std::string XmlDomDocument_T::getChildAttribute(const char *parentTag, int parentIndex,const char *childTag,
                                               int childIndex, const char *attributeTag)
 {
     XMLCh * temp = xercesc::XMLString::transcode(parentTag);
@@ -76,7 +76,7 @@ std::string XmlDomDocument::getChildAttribute(const char *parentTag, int parentI
     return value;
 }
 
-int XmlDomDocument::getChildCount(const char *parentTag, int parentIndex, const char *childTag)
+int XmlDomDocument_T::getChildCount(const char *parentTag, int parentIndex, const char *childTag)
 {
     XMLCh * temp = xercesc::XMLString::transcode(parentTag);
     xercesc::DOMNodeList * list = m_doc->getElementsByTagName(temp);

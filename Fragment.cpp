@@ -5,18 +5,18 @@
 #include "Fragment.h"
 
 std::string::size_type Sz;
-FRAGMENT::FRAGMENT(const char *xmlFile) : basis(NULL), noteSamples(NULL), restSamples(NULL)
+Fragment_T::Fragment_T(const char *xmlFile) : basis(NULL), noteSamples(NULL), restSamples(NULL)
 {
-    noteSamples = new std::vector<NOTE>;
-    restSamples = new std::vector<REST>;
+    noteSamples = new std::vector<Note_T>;
+    restSamples = new std::vector<Rest_T>;
     std::cout<<"in frag constr\n";
     std::string value;
-    doc = new XmlDomDocument(xmlFile);
+    doc = new XmlDomDocument_T(xmlFile);
     for (int i = 0; i < doc->getChildCount("mei", 0, "measure"); i++)
     {
         for (int k = 0; k < doc->getChildCount("measure", i, "note"); k++)
         {
-            NOTE note;
+            Note_T note;
             value = doc->getChildAttribute("measure", i, "note", k, "pname");
             note.SetPitch(value[0]);
             value = doc->getChildAttribute("measure", i, "note", k, "accid");
@@ -29,7 +29,7 @@ FRAGMENT::FRAGMENT(const char *xmlFile) : basis(NULL), noteSamples(NULL), restSa
         }
         for (int k = 0; k < doc->getChildCount("measure", i, "rest"); k++)
         {
-            REST rest;
+            Rest_T rest;
             value = doc->getChildAttribute("measure", i, "note", k, "dur");
             rest.SetDuration(std::stod(value, &Sz));
             restSamples->push_back(rest);

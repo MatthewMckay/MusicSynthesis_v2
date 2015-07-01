@@ -4,11 +4,11 @@
 
 #include "Rest.h"
 
-void REST::SetDuration(double d) { duration = d; }
+void Rest_T::SetDuration(double d) { duration = d; }
 
-double REST::GetDuration() { return duration; }
+double Rest_T::GetDuration() const { return duration; }
 
-std::ostream& operator<< (std::ostream& ostr, REST& rest)
+std::ostream& operator<< (std::ostream& ostr, Rest_T & rest)
 {
     ostr << "DURATION = " << rest.duration;
     ostr << "\n";

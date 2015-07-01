@@ -12,13 +12,13 @@
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
 
-#include "XmlDomErrorHandler.h"
+#include "XmlDomErrorHandler_T.h"
 
-class XmlDomDocument {
+class XmlDomDocument_T {
     xercesc::DOMDocument * m_doc;
 public:
-    XmlDomDocument(const char * xmlfile);
-    ~XmlDomDocument();
+    XmlDomDocument_T(const char * xmlfile);
+    ~XmlDomDocument_T();
 
     std::string getChildValue(const char * parentTag, int parentIndex,
                               const char * childTag,  int childIndex);
@@ -29,7 +29,7 @@ public:
                       const char * childTag);
 
 private:
-    XmlDomDocument();
-    XmlDomDocument(const XmlDomDocument &);
+    XmlDomDocument_T();
+    XmlDomDocument_T(const XmlDomDocument_T &);
 };
 #endif //MUSICSYNTHESIS_V2_XMLDOMDOCUMENT_H

@@ -6,30 +6,30 @@
 
 //************* Setters **********************
 
-void NOTE::SetPitch(char p) { pitch = p; }
+void Note_T::SetPitch(char p) { pitch = p; }
 
-void NOTE::SetAccidental(char a) { accidental = a; }
+void Note_T::SetAccidental(char a) { accidental = a; }
 
-void NOTE::SetOctave(int o) { octave = o; }
+void Note_T::SetOctave(int o) { octave = o; }
 
-void NOTE::SetDuration(double d) { duration = d; }
+void Note_T::SetDuration(double d) { duration = d; }
 
 
 
 //************* Getters **********************
 
-char   NOTE::GetPitch() { return pitch; }
+char   Note_T::GetPitch() const { return pitch; }
 
-char   NOTE::GetAccidental() { return accidental; }
+char   Note_T::GetAccidental() const { return accidental; }
 
-int    NOTE::GetOctave() { return octave; }
+int    Note_T::GetOctave() const { return octave; }
 
-double NOTE::GetDuration() { return duration; }
+double Note_T::GetDuration() const { return duration; }
 
 
 //************* Operators ********************
 
-std::ostream& operator<< (std::ostream& ostr, NOTE &note)
+std::ostream& operator<< (std::ostream& ostr, Note_T &note)
 {
     ostr << "PITCH = " << note.pitch;
     ostr << "  ACCIDENTAL = " << note.accidental;

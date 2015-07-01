@@ -8,27 +8,19 @@
 #include <iostream>
 #include <vector>
 
+#include "Duration.h"
 #include "Note.h"
 #include "Rest.h"
 
-class MEASURE {
+class Measure_T {
 private:
     //keeps track of the order of notes and rests
-    std::vector<std::pair<char, int>> order;
-    std::vector<NOTE> notes;
-    std::vector<REST> rests;
+    std::vector<Duration_T *> sequence;
+
 public:
-    MEASURE();
-    ~MEASURE();
-
-    void UpdateOrder(char mType, unsigned long pos);
-    void InsertNote(char p, char a, int o, double d);
-    void InsertRest(double d);
-
-    std::vector<NOTE> GetNotes();
-    std::vector<REST> GetRests();
-
-    friend std::ostream& operator<< (std::ostream& ostr, MEASURE& measure);
+    Measure_T(){};
+    ~Measure_T();
+    void AddElement(Duration_T * element);
 };
 
 

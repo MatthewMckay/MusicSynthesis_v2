@@ -8,18 +8,21 @@
 
 #include <iostream>
 
-class REST {
+#include "Duration.h"
+
+class Rest_T : public Duration_T {
 private:
     double duration;
 public:
-    REST() : duration(-1) {};
-    //~REST();
+    Rest_T() : duration(-1) {};
+    Rest_T(double d) : duration(d) {};
+    ~Rest_T(){};
 
     void SetDuration(double d);
 
-    double GetDuration();
+    double GetDuration() const;
 
-    friend std::ostream& operator<< (std::ostream& ostr, REST& rest);
+    friend std::ostream& operator<< (std::ostream& ostr, Rest_T & rest);
 };
 
 

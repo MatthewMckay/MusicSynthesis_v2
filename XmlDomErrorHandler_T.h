@@ -9,7 +9,7 @@
 
 #include <xercesc/sax/HandlerBase.hpp>
 
-class XmlDomErrorHandler : public xercesc::HandlerBase
+class XmlDomErrorHandler_T : public xercesc::HandlerBase
 {
 public:
     void fatalError(const xercesc::SAXParseException & exc);

@@ -8,15 +8,17 @@
 #include <iostream>
 #include <fstream>
 
-class NOTE {
+#include "Duration.h"
+
+class Note_T : public Duration_T {
 private:
     char   pitch;
     char   accidental;
     int    octave;
     double duration;
 public:
-    NOTE() : pitch('\0'), accidental('\0'), octave(-1), duration(-1) {}
-    NOTE(char p, char a, int o, double d) : pitch(p), accidental(a), octave(o), duration(d) {}
+    Note_T() : pitch('\0'), accidental('\0'), octave(-1), duration(-1) {}
+    Note_T(char p, char a, int o, double d) : pitch(p), accidental(a), octave(o), duration(d) {}
     //~NOTE();
 
     void SetPitch(char p);
@@ -24,12 +26,12 @@ public:
     void SetOctave(int o);
     void SetDuration(double d);
 
-    char   GetPitch();
-    char   GetAccidental();
-    int    GetOctave();
-    double GetDuration();
+    char   GetPitch() const;
+    char   GetAccidental() const;
+    int    GetOctave() const;
+    double GetDuration() const;
 
-    friend std::ostream& operator<< (std::ostream& ostr, NOTE& note);
+    friend std::ostream& operator<< (std::ostream& ostr, const Note_T & note);
 };
 
 
