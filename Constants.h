@@ -18,30 +18,15 @@ const int FRAGMENT_LENGTH = 3;
  * Each 'n', 's', and 'f' indicates the default accidental for each pitch (string[0] = 'a' through 'g') in
  * each key signature SF0 - F7.
  */
-//                          a   b   c   d   e   f   g
-const std::string SF0[] = {"n","n","n","n","n","n","n"};
-const std::string S1[]  = {"n","n","n","n","n","s","n"};
-const std::string S2[]  = {"n","n","s","n","n","s","n"};
-const std::string S3[]  = {"n","n","s","n","n","s","s"};
-const std::string S4[]  = {"n","n","s","s","n","s","s"};
-const std::string S5[]  = {"s","n","s","s","n","s","s"};
-const std::string S6[]  = {"s","n","s","s","s","s","s"};
-const std::string S7[]  = {"s","s","s","s","s","s","s"};
-const std::string F1[]  = {"n","f","n","n","n","n","n"};
-const std::string F2[]  = {"n","f","n","n","f","n","n"};
-const std::string F3[]  = {"f","f","n","n","f","n","n"};
-const std::string F4[]  = {"f","f","n","f","f","n","n"};
-const std::string F5[]  = {"f","f","n","f","f","n","f"};
-const std::string F6[]  = {"f","f","f","f","f","n","f"};
-const std::string F7[]  = {"f","f","f","f","f","f","f"};
-const std::string * SHARPS[] = {S1,S2,S3,S4,S5,S6,S7};
-const std::string * FLATS[]  = {F1,F2,F3,F4,F5,F6,F7};
 
-const std::string PROGRESSION = "fcgdaeb";
+const std::string PROGRESSION = "fcgdaeb";//order of increasing sharps, (its reverse for flats)
 
+/**
+ * takes in a KeySig value and returns a vector of default accidental values
+ */
 std::vector<std::string> GetKeySig (const std::string value) {
-                                        //A   B   C   D   E   F   G
-    std::vector<std::string> defaults = {"n","n","n","n","n","n","n"};
+                                               //A B C D E F G
+    std::vector<std::string> defaults (7, "n");//0 1 2 3 4 5 6
     //get the number of sharps or flats
     std::string number = value.substr(0, 1);
     int n = std::stoi(number);
@@ -51,10 +36,12 @@ std::vector<std::string> GetKeySig (const std::string value) {
         const std::string type = value.substr(1);
         //if there are doubles then there will not be any naturals
         if (type.size() > 1) {
+                //double sharps
             if (type[0] == 's'){
                 for (int i = 0; i < n; i++) defaults[PROGRESSION[i]-'a'] = type;
                 for (int i = n; i < PROGRESSION.size(); i++) defaults[PROGRESSION[i]-'a'] = type[0];
             }
+                //double flats
             else {
                 for (int i = PROGRESSION.size() - 1; i >= PROGRESSION.size() - n; i--){
                     defaults[PROGRESSION[i]-'a'] = type;
@@ -63,9 +50,11 @@ std::vector<std::string> GetKeySig (const std::string value) {
             }
         }
         else {
+                //sharps
             if (type[0] == 's'){
                 for (int i = 0; i < n; i++) defaults[PROGRESSION[i]-'a'] = type;
             }
+                //flats
             else {
                 for (int i = PROGRESSION.size() - 1; i >= PROGRESSION.size() - n; i--){
                     defaults[PROGRESSION[i]-'a'] = type;

@@ -15,21 +15,18 @@ private:
     char   pitch;
     char   accidental;
     int    octave;
-    double duration;
 public:
-    Note_T() : pitch('\0'), accidental('\0'), octave(-1), duration(-1) {}
-    Note_T(char p, char a, int o, double d) : pitch(p), accidental(a), octave(o), duration(d) {}
-    //~NOTE();
-
+    Note_T() : pitch('\0'), accidental('0'), octave(7) {}
     void SetPitch(char p);
     void SetAccidental(char a);
     void SetOctave(int o);
-    void SetDuration(double d);
+    void SetDuration(int d);
+    void SetDuration(TimeFraction_T d);
+    void DotModify(const int& dots);
 
-    char   GetPitch() const;
-    char   GetAccidental() const;
-    int    GetOctave() const;
-    double GetDuration() const;
+    char GetPitch() const;
+    char GetAccidental() const;
+    int  GetOctave() const;
 
     friend std::ostream& operator<< (std::ostream& ostr, const Note_T & note);
 };
