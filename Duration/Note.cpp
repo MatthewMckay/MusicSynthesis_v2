@@ -22,6 +22,11 @@ void Note_T::SetDuration(int d) {
 void Note_T::SetDuration(TimeFraction_T d) {
     duration = d;
 }
+
+/**
+ * dots (number of dots n) modify the original duration (dur) with the following equation
+ * dur * (2 - (1 / (2^n))) == dur * ((2^(n+1)-1)/(2^n))
+ */
 void Note_T::DotModify(const int& dots ) {
     if ( dots == 0 ) return;
     else{

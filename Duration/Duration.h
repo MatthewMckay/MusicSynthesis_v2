@@ -5,9 +5,7 @@
 #ifndef MUSICSYNTHESIS_V2_DURATION_H
 #define MUSICSYNTHESIS_V2_DURATION_H
 
-#include <iosfwd>
 #include <iostream>
-#include <fstream>
 
 /**
  * rests use integers in two ways to represent time. for rests within a measure they indicate the denominator (the

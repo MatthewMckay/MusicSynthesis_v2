@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+#include "Duration.h"
 #include "Rest.h"
 
 class MultiMeasureRest_T : public Rest_T{

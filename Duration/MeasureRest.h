@@ -5,7 +5,11 @@
 #ifndef MUSICSYNTHESIS_V2_MEASUREREST_H
 #define MUSICSYNTHESIS_V2_MEASUREREST_H
 
+#include <iostream>
+
+#include "Duration.h"
 #include "Rest.h"
+
 class MeasureRest_T : public Rest_T {
 public:
     MeasureRest_T(){}

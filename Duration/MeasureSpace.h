@@ -5,6 +5,9 @@
 #ifndef MUSICSYNTHESIS_V2_MEASURESPACE_H
 #define MUSICSYNTHESIS_V2_MEASURESPACE_H
 
+#include <iostream>
+
+#include "Duration.h"
 #include "Rest.h"
 
 class MeasureSpace_T : public Rest_T {

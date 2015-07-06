@@ -24,7 +24,7 @@ const std::string PROGRESSION = "fcgdaeb";//order of increasing sharps, (its rev
 /**
  * takes in a KeySig value and returns a vector of default accidental values
  */
-std::vector<std::string> GetKeySig (const std::string value) {
+std::vector<std::string> GetKeySig (std::string value) {
                                                //A B C D E F G
     std::vector<std::string> defaults (7, "n");//0 1 2 3 4 5 6
     //get the number of sharps or flats

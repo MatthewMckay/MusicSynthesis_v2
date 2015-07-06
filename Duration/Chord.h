@@ -5,6 +5,7 @@
 #ifndef MUSICSYNTHESIS_V2_CHORD_H
 #define MUSICSYNTHESIS_V2_CHORD_H
 
+#include <iostream>
 #include <vector>
 
 #include "Duration.h"
@@ -20,6 +21,14 @@ public:
     void DotModify(int d);
     void AddNote(Note_T note);
     std::vector<Note_T> GetNotes() const {return notes;}
+
+    friend std::ostream& operator<< (std::ostream& ostr, const Chord_T& chord){
+        ostr << "Chord:\n";
+        for (auto it = chord.notes.cbegin(); it != chord.notes.cend(); ++it) {
+            ostr << "\t" << *it;
+        }
+        return ostr;
+    }
 };
 
 
