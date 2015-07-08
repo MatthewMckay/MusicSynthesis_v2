@@ -3,7 +3,7 @@
 //
 
 #include "Duration.h"
-void Duration_T::SetDuration(int n, int d) {
+void Duration_T::SetDuration(int d) {
     if (GetDuration() == 0){
         duration.numerator = n;
         duration.denominator = d;

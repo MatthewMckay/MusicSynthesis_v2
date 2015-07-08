@@ -6,7 +6,8 @@
 #define MUSICSYNTHESIS_V2_CONSTANTS_H
 #include <string>
 #include <vector>
-
+const std::string ERR_CLRS = "\033[1;48;5;228;38;5;202m";
+const std::string DFLT_CLRS = "\033[0m";
 const int FRAGMENT_LENGTH = 3;
 
 /**

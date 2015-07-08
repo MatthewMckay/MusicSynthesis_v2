@@ -17,7 +17,7 @@
 #include "../Duration/MultiMeasureRest_T.h"
 
 class Layer_T {
-    friend class Staff_T;
+    friend class Processing_T;
 private:
     std::vector<Duration_T> sequence;
     std::string n;

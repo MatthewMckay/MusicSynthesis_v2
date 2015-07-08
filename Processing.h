@@ -5,7 +5,11 @@
 #ifndef MUSICSYNTHESIS_V2_PROCESSING_H
 #define MUSICSYNTHESIS_V2_PROCESSING_H
 #include <iostream>
+#include <map>
+#include <unordered_map>
+#include <set>
 #include <vector>
+#include <stack>
 #include <string>
 #include <exception>
 
@@ -28,54 +32,59 @@
 #include "Duration/MeasureRest.h"
 #include "Duration/MeasureSpace.h"
 #include "Duration/MultiMeasureRest_T.h"
+//staffGrp not implemented
+//music is queried explicitly
+#define TAGS "scoreDef","staffDef","section","measure","staff","layer","chord","note","rest","mRest","mSpace","multiRest"
+#define SCOREDEFATTS “meter.count”,”meter.unit”,”key.sig”,”key.mode”
+#define STAFFDEFATTS “key.sig”,”label”,”n”
+#define SECTATTS "n"
+#define MEASATTS "n"
+#define STAFFATTS "n"
+#define LAYERATTS "n"
+#define CHORDATTS “dur”,”accid”,”dots"
+#define NOTEATTS “pname”,”accid”,”oct”,”dur”,”dots”
+#define RESTATTS "dur"
+#define MULTIRESTATTS "num"
 
-/**
- * parses all files
- * todo 1 - input all files
- * todo 2 - if file was just parsed, delete the XML doc
- * todo 3 - pull all data in the music elements
- */
-
-/**
- * Assumed: each file contains only one music element
- * each music has a scoreDef and sections
- *  each scoreDef has a staffGrp and atts(meter.count, meter.unit, key.sig, and key.mode) need error catches otherwise
- *      each staffGrp has staffDefs
- *          each staffDef may have atts(key.sig, label n)
- *          (all elements with keysig atts will hold a default pitch string)
- *  each section has measures and may have att(n)
- *      each measure has staff(s)
- *          each staff has layer(s) and may have att(n)
- *              each layer has notes and rests and may have att(n)
- */
-const int INDECIES = 8;
-typedef std::vector<std::pair<int,int>> Counts_T;
 class Processing_T {
+    typedef void funcPtr_T();
+    typedef std::map<const std::string, funcPtr_T*> strFuncMap_T;
+    typedef const std::set<const std::string> strSet_T;
 private:
+    const std::set<const std::string> tags;
+    strFuncMap_T functionMap;
     XmlDomDocument_T * doc;
-    std::vector<Music_T> music;
-    std::vector<int> i;
-    Counts_T I;
+    std::stack<Music_T> music;
+    int musicIndex;
+#define GEA(str) doc->GetElementAttribute(str)
+#define GEA_E(str) doc->GetElementAttribute(str).empty()
+#define MT music.top()
+#define SEB sections.back()
+#define MB measure.back()
+#define SB staff.back()
+#define LB layers.back()
+#define SQB sequence.back()
+#define NB notes.back()
+    Processing_T(){};
 public:
-    Processing_T(std::vector<const char *> f) {
-        for (int k = 0; k < INDECIES; k++) i.push_back(0);
-        for (auto it = f.begin(); it != f.end(); ++it){
-            doc = new XmlDomDocument_T(*it);
-            for (int k = 0; k < INDECIES; k++) {
-                i.push_back(0);
-                I.push_back(std::make_pair(0,0));
-            }
-            GetMusic();
-            delete doc;
-        }
-    }
-    void GetMusic();             //index 0
-    void GetScoreDefinition();   //index 1
-    void GetStaffDefinitions();  //index 2
-    void GetSections();          //index 3
-    void GetMeasures();          //index 4
-    void GetStaffs();            //index 5
-    void GetLayers();            //index 6
+    Processing_T(std::vector<const char *> files);
+
+    void BeginProcessing();
+    void CreateMusic();
+    void CreateScoreDef();
+    //void CreateStaffGrp();
+    void CreateStaffDef();
+    void CreateSection();
+    void CreateMeasure();
+    void CreateStaff();
+    void CreateLayer();
+    void CreateChord();
+    Note_T AddChordNote(TimeFraction_T &dur);
+    void CreateNote();
+    void CreateRest();
+    void CreateMRest();
+    void CreateMSpace();
+    void CreateMultiRest();
 };
 
 

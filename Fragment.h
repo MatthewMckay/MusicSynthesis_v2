@@ -9,8 +9,8 @@
 #include <string>
 
 #include "XmlDomDocument_T.h"
-#include "Note.h"
-#include "Rest.h"
+#include "Duration/Note.h"
+#include "Duration/Rest.h"
 #include "Basis.h"
 
 class Fragment_T {

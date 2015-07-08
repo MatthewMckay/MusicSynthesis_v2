@@ -9,10 +9,10 @@
 #include <vector>
 #include <string>
 
-#include <Staff.h>
+#include "Staff.h"
 
 class Measure_T {
-    friend class Music_T;
+    friend class Processing_T;
 private:
     std::vector<Staff_T> staffs;
     std::string n;

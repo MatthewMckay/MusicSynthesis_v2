@@ -8,7 +8,7 @@
 
 void Note_T::SetPitch(char p) { pitch = p; }
 
-void Note_T::SetAccidental(char a) { accidental = a; }
+void Note_T::SetAccidental(std::string a) { accidental = a; }
 
 void Note_T::SetOctave(int o) { octave = o; }
 

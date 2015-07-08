@@ -11,7 +11,7 @@
 #include "Layer.h"
 
 class Staff_T {
-    friend class Section_T;
+    friend class Processing_T;
 private:
     std::vector<Layer_T> layers;
     std::string n;

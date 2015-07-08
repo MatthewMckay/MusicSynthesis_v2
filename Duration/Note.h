@@ -7,18 +7,20 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include "Duration.h"
 
 class Note_T : public Duration_T {
+friend class Processing_T;
 private:
     char   pitch;
-    char   accidental;
+    std::string   accidental;
     int    octave;
 public:
-    Note_T() : pitch('\0'), accidental('0'), octave(7) {}
+    Note_T() : pitch('\0'), accidental(""), octave(7) {}
     void SetPitch(char p);
-    void SetAccidental(char a);
+    void SetAccidental(std::string a);
     void SetOctave(int o);
     void SetDuration(int d);
     void SetDuration(TimeFraction_T d);

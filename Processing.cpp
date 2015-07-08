@@ -4,76 +4,164 @@
 
 #include "Processing.h"
 
-void Processing_T::GetMusic() {
-    try {
-        if (doc->getChildCount("mei", 0, "music") > 1) {
-            throw "Only the first music will be processed from this file";
-        }
-        else {
-            Music_T m;
-            music.push_back(m);
-            i[1] = i[3] = 0;
-            for (i[1]; i[1] < doc->getChildCount("music", 0, "scoreDef"); i[1]++) {
-                ScoreDefinition_T sd;
-                music[i[0]].scoreDef = sd;
-                GetScoreDefinition();
-            }
-            for (i[3]; i[3] < doc->getChildCount("music", 0, "section"); i[3]++) {
-                Section_T s;
-                music[i[0]].sections.push_back(s);
-                GetSections();
-            }
-            i[0]++;
-        }
-    }
-    catch (std::string e) {
-        std::cerr << e << '\n';
-        return;
+Processing_T::Processing_T(std::vector<const char *> files) {
+    //functionMap["music"]    = &CreateMusic;
+    functionMap["scoreDef"] = &CreateScoreDef;
+    //functionMap["staffGrp"] = &CreateStaffGrp;
+    functionMap["staffDef"] = &CreateStaffDef;
+    functionMap["section"]  = &CreateSection;
+    functionMap["measure"]  = &CreateMeasure;
+    functionMap["staff"]    = &CreateStaff;
+    functionMap["layer"]    = &CreateLayer;
+    functionMap["chord"]    = &CreateChord;
+    functionMap["note"]     = &CreateNote;
+    functionMap["rest"]     = &CreateRest;
+    functionMap["mRest"]    = &CreateMRest;
+    functionMap["mSpace"]   = &CreateMSpace;
+    functionMap["multiRest"]= &CreateMultiRest;
+
+    tags = {TAGS};
+    for (auto it = files.begin(); it != files.end(); ++it){
+        doc = new XmlDomDocument_T(*it);
+        BeginProcessing();
+        delete doc;
     }
 }
 
-void Processing_T::GetScoreDefinition() {
-    std::string value;
-    value = doc->getChildAttribute("music", 0, "scoreDef", i[1], "meter.count");
-    music[i[0]].scoreDef.meterCount = std::stoi(value);
-    value = doc->getChildAttribute("music", 0, "scoreDef", i[1], "meter.unit");
-    music[i[0]].scoreDef.meterUnit = std::stoi(value);
-    value = doc->getChildAttribute("music", 0, "scoreDef", i[1], "key.mode");
-    music[i[0]].scoreDef.keyMode = value;
-    value = doc->getChildAttribute("music", 0, "scoreDef", i[1], "key.sig");
-    music[i[0]].scoreDef.keySig = value;
-    music[i[0]].scoreDef.defaultAccidentals = GetKeySig(music[i[0]].scoreDef.keySig);
-    i[2] = 0;
-    for (i[2]; i[2] < doc->getChildCount("scoreDef", i[1], "staffDef"); i[2]++){
-        StaffDefinition_T st;
-        music[i[0]].scoreDef.staffGrp.push_back(st);
-        GetStaffDefinitions();
+void Processing_T::BeginProcessing() {
+    std::string value = " ";
+    for (int i = 0; i < doc->GetChildCount("music"); i++){
+        musicIndex = i;
+        doc->SetNewRoot("music",i);
+        CreateMusic();
+        while (value != ""){
+            value = doc->FirstDescendantNamed(tags);
+            strFuncMap_T::iterator it = functionMap.find(value);
+            if (it != functionMap.end()) it->second();
+        }
     }
 }
 
-void Processing_T::GetStaffDefinitions() {
-    std::string value;
-    value = doc->getChildAttribute("scoreDef", i[1], "staffDef", i[2], "n");
-    music[i[0]].scoreDef.staffGrp[i[2]].n = value;
-    value = doc->getChildAttribute("scoreDef", i[1], "staffDef", i[2], "label");
-    music[i[0]].scoreDef.staffGrp[i[2]].label = value;
-    value = doc->getChildAttribute("scoreDef", i[1], "staffDef", i[2], "key.sig");
-    if (value == "") {
-    music[i[0]].scoreDef.staffGrp[i[2]].keySig = music[i[0]].scoreDef.keySig;
-    music[i[0]].scoreDef.staffGrp[i[2]].defaultAccidentals = music[i[0]].scoreDef.defaultAccidentals;
+
+void Processing_T::CreateMusic() {
+    Music_T newMusic;
+    music.push(newMusic);
+}
+//“meter.count”,”meter.unit”,”key.sig”,”key.mode”
+void Processing_T::CreateScoreDef() {
+    ScoreDefinition_T newScoreDef;;
+    if (GEA_E("meter.count")) newScoreDef.meterCount = std::stoi(GEA("meter.count"));
+    if (GEA_E("meter.unit")) newScoreDef.meterUnit  = std::stoi(GEA("meter.unit"));
+    newScoreDef.keySig  = GEA("key.sig");
+    newScoreDef.keyMode = GEA("key.mode");
+    newScoreDef.defaultAccidentals = GetKeySig(newScoreDef.keySig);
+    MT.scoreDef = newScoreDef;
+}
+
+/*void Processing_T::CreateStaffGrp() {
+}*/
+
+//“key.sig”,”label”,”n”
+void Processing_T::CreateStaffDef() {
+    StaffDefinition_T staffDef;
+    staffDef.keySig = GEA("key.sig");
+    staffDef.label  = GEA("label");
+    staffDef.n      = GEA("n");
+    staffDef.defaultAccidentals = GetKeySig(staffDef.keySig);
+    MT.scoreDef.staffDefs.insert({staffDef.n, staffDef});
+}
+
+void Processing_T::CreateSection() {
+    Section_T sect;
+    sect.n = GEA("n");
+    MT.sections.push_back(sect);
+}
+
+void Processing_T::CreateMeasure() {
+    Measure_T measure;
+    measure.n = GEA("n");
+    MT.SEB.measures.push_back(measure);
+}
+
+void Processing_T::CreateStaff() {
+    Staff_T staff;
+    staff.n = GEA("n");
+    MT.SEB.MB.staffs.push_back(staff);
+}
+
+void Processing_T::CreateLayer() {
+    Layer_T layer;
+    layer.n = GEA("n");
+    MT.SEB.MB.SB.layers.push_back(layer);
+}
+//“dur”,”dots"
+void Processing_T::CreateChord() {
+    Chord_T chord;
+    if (!GEA_E("dur")){
+        chord.SetDuration(std::stoi(GEA("dur")));
+        if (!GEA_E("dots")) chord.DotModify(std::stoi(GEA("dots")));
     }
     else {
-        music[i[0]].scoreDef.staffGrp[i[2]].keySig = value;
-        music[i[0]].scoreDef.staffGrp[i[2]].defaultAccidentals = GetKeySig(value);
+        for (int i = 0; i < doc->GetTotalChildCount(); i++){
+            chord.notes.push_back(AddChordNote(chord.duration));
+        }
     }
 }
 
-void Processing_T::GetSections() {
-    std::string value;
-    value = doc->getChildAttribute("music", 0, "section", i[3], "n");
-    music[i[0]].sections[i[3]].n = value;
-    i[4] = 0;
-    for (i[4]; i[4] < doc->getChildCount("section",i[3], "measure"); i[4]++){
+Note_T Processing_T::AddChordNote(TimeFraction_T &dur) {
+    Note_T note;
+    TimeFraction_T tf;
+    note.pitch = GEA("pname")[0];
+    try {
+        if (!GEA_E("oct")) note.octave = std::stoi(GEA("oct"));
+        else throw "ERR: Notes must have octave";
+    }
+    catch (std::string e) { std::cerr << ERR_CLRS << e << DFLT_CLRS << '\n'; }
 
+    try {
+        if (!GEA_E("dur")){
+            note.SetDuration(std::stoi(GEA("dur")));
+            if (!GEA_E("dots")) note.DotModify(std::stoi(GEA("dots")));
+            if (dur == tf) dur = note.duration;
+            else if (note.duration != dur) throw "ERR: All notes in a chord must have the same duration";
+        }
+        else {
+            if (dur != tf) note.duration = dur;
+            else throw "ERR: All notes and chords must have durations";
+        }
+    }
+    catch (std::string e) { std::cerr << ERR_CLRS << e << DFLT_CLRS << '\n'; }
+
+    if (GEA_E("accid")) note.accidental = GEA("accid");
+    else {
+        strStfMapIt_T it = music.top().scoreDef.staffDefs.find(MT.SEB.MB.SB.LB.n);
+        if(it != MT.scoreDef.staffDefs.end()){
+            if (!it->second.keySig.empty()) {
+                note.accidental = it->second.keySig[note.pitch - 'a'];
+            }
+        }
+        else note.accidental = "n";
     }
 }
+
+//“pname”,”accid”,”oct”,”dur”,”dots”
+void Processing_T::CreateNote() {
+
+}
+//dur
+void Processing_T::CreateRest() {
+
+}
+//num
+void Processing_T::CreateMRest() {
+
+}
+
+void Processing_T::CreateMSpace() {
+
+}
+
+void Processing_T::CreateMultiRest() {
+}
+
+

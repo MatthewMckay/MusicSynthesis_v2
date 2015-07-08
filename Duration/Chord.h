@@ -12,6 +12,7 @@
 #include "Note.h"
 
 class Chord_T : public Duration_T {
+friend class Processing_T;
 private:
     std::vector<Note_T> notes;
 public:

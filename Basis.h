@@ -10,8 +10,8 @@
 #include <algorithm>
 #include <unordered_set>
 
-#include "Note.h"
-#include "Rest.h"
+#include "Duration/Note.h"
+#include "Duration/Rest.h"
 
 class BASIS {
     typedef std::unordered_set<char> usc;
