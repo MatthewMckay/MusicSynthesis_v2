@@ -11,6 +11,10 @@
 #include "Duration.h"
 #include "Rest.h"
 
+
+//TODO error in logic correct duration fraction. a time fraction indicates a fraction of a note not measure
+//TODO utilize time signature (meter count, and meter unit)
+
 /**
  * MeasureRest_T indicate a rest for an entire measure and is indicated by a symbol in MEI
  */

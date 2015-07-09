@@ -11,7 +11,7 @@
 #include "Duration.h"
 #include "Rest.h"
 
-//TODO error in logic correct duration fraction. a time fraction indicates a fraction of a beat not measure
+//TODO error in logic correct duration fraction. a time fraction indicates a fraction of a note not measure
 //TODO utilize time signature (meter count, and meter unit)
 
 /**
