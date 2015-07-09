@@ -23,12 +23,12 @@ class ScoreDefinition_T {
     friend class Processing_T;
 private:
     typedef std::unordered_map<std::string, StaffDefinition_T> strStfMap_T;
-    int meterCount;
-    int meterUnit;
-    std::string keySig;
-    StrV_T defaultAccidentals;
-    std::string keyMode;
-    strStfMap_T staffDefs;
+    int meterCount;             //how many beats
+    int meterUnit;              //length of beat
+    std::string keySig;         //i.e. "1s" = 1 sharp
+    StrV_T defaultAccidentals;  //i.e. for C major keySig = "0" this would b (A"n" B"n" C"n" D"n" E"n" F"n" G"n")
+    std::string keyMode;        //i.e. "major"
+    strStfMap_T staffDefs;      //holds a set of staff definitions that possibly hold alternate key signatures
 
     //std::vector<StaffGroup_T> staffGrp;
 public:

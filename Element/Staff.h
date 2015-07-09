@@ -11,11 +11,17 @@
 
 #include "Layer.h"
 
+/**
+ * Staff_T holds a group of layers
+ * needed to retrieve default accidentals for notes from coressponding staff definitions
+ */
 class Staff_T {
+    //to make code more readable Processing_T is friended
     friend class Processing_T;
 private:
-    std::vector<Layer_T> layers;
-    std::string n;
+    std::vector<Layer_T> layers;    //holds the layers
+    std::string n;                  //holds the name of the coressponding staff definition
+
 public:
     friend std::ostream& operator<< (std::ostream& ostr, const Staff_T& staff){
         ostr << "\tSTAFF:  n = ";

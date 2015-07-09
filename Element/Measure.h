@@ -11,11 +11,16 @@
 
 #include "Staff.h"
 
+/**
+ * Measure_T divides music into pieces by a certain number of beats
+ * each measure can contain many staffs
+ */
 class Measure_T {
+    //used to make code more readable
     friend class Processing_T;
 private:
-    std::vector<Staff_T> staffs;
-    std::string n;
+    std::vector<Staff_T> staffs;    //holds a group of staffs
+    std::string n;                  //not used at this time
 public:
     friend std::ostream& operator<< (std::ostream& ostr, const Measure_T& measure){
         ostr << "  MEASURE:  n = ";

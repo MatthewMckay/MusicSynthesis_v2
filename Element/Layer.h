@@ -18,12 +18,19 @@
 #include "../Duration/MeasureSpace.h"
 #include "../Duration/MultiMeasureRest_T.h"
 
+/**
+ * Layer_T is used divide measures into the different note progressions
+ * a Layer_T instance contains a sequence of Duration_T objs for one progression
+ */
 class Layer_T {
+    //used to make code more readable
     friend class Processing_T;
 private:
-    std::vector<SHP_T(Duration_T)> sequence;
-    std::string n;
+    //SHP_T(x) = std::shared_ptr(x)
+    std::vector<SHP_T(Duration_T)> sequence;    //holds the sequence of notes and rests
+    std::string n;                              //not used at this time (may be useful when creating fragments
 public:
+
     friend std::ostream& operator<< (std::ostream& ostr, const Layer_T& layer){
         #define LS layer.sequence
         ostr << "\t  LAYER:  n = ";

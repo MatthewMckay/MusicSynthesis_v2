@@ -11,11 +11,16 @@
 
 #include "Measure.h"
 
+/**
+ * Section_T divides music into different parts
+ * music is divided into sections that may have different music qualities
+ */
 class Section_T {
+    //to make code more readable Processing_T is friended
     friend class Processing_T;
 private:
-    std::vector<Measure_T> measures;
-    std::string n;
+    std::vector<Measure_T> measures;    //holds relevant measures
+    std::string n;                      //not used at this this time
 public:
     Section_T(){}
     friend std::ostream& operator<< (std::ostream& ostr, const Section_T& section){
