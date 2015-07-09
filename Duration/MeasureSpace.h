@@ -12,10 +12,13 @@
 
 class MeasureSpace_T : public Rest_T {
 public:
-    MeasureSpace_T(){}
+    MeasureSpace_T(){type = "mSpace";}
     void SetDuration() {duration.numerator = 1;}
     friend std::ostream& operator<< (std::ostream& ostr, const MeasureSpace_T& ms) {
-        ostr << "DURATION = " << ms.GetDurationFraction() << "\n";
+        TimeFraction_T tf = ms.GetDurationFraction();
+        ostr << "\t\tMEASURE SPACE:  DURATION = " << tf;
+        ostr << "\n";
+        return ostr;
     }
 };
 

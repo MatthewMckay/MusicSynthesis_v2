@@ -12,7 +12,7 @@
 
 class Rest_T : public Duration_T {
 public:
-    Rest_T(){}
+    Rest_T(){type = "rest";}
     virtual void SetDuration(int d);
 
     friend std::ostream& operator<< (std::ostream& ostr, const Rest_T & rest);

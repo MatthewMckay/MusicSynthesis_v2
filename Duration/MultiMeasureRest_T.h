@@ -12,11 +12,14 @@
 
 class MultiMeasureRest_T : public Rest_T{
 public:
-    MultiMeasureRest_T(){}
+    MultiMeasureRest_T(){type = "multiRest";}
     void SetDuration(int n) { duration.numerator = n; }
 
     friend std::ostream& operator<< (std::ostream& ostr, const MultiMeasureRest_T& mmr) {
-        ostr << "DURATION = " << mmr.GetDurationFraction() << "\n";
+        TimeFraction_T tf = mmr.GetDurationFraction();
+        ostr << "\t\tMULTI-MEASURE REST:  DURATION = " << tf;
+        ostr << "\n";
+        return ostr;
     }
 };
 

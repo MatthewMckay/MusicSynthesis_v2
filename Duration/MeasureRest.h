@@ -10,12 +10,15 @@
 #include "Duration.h"
 #include "Rest.h"
 
-class MeasureRest_T : public Rest_T {
+class MeasureRest_T : public Duration_T {
 public:
-    MeasureRest_T(){}
+    MeasureRest_T(){type = "mRest";}
     void SetDuration() { duration.numerator = 1; }
     friend std::ostream& operator<< (std::ostream& ostr, const MeasureRest_T& mr) {
-        ostr << "DURATION = " << mr.GetDurationFraction() << "\n";
+        TimeFraction_T tf = mr.GetDurationFraction();
+        ostr << "\t\tMEASURE REST:  DURATION = " << tf;
+        ostr << "\n";
+        return ostr;
     }
 };
 

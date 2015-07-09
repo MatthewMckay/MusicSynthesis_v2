@@ -8,8 +8,10 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include <iostream>
 
 #include "StaffDefinition.h"
+#include "../Constants.h"
 
 typedef std::unordered_map<std::string, StaffDefinition_T>::iterator strStfMapIt_T;
 
@@ -21,13 +23,30 @@ private:
     int meterCount;
     int meterUnit;
     std::string keySig;
-    std::vector<std::string> defaultAccidentals;
+    StrV_T defaultAccidentals;
     std::string keyMode;
     strStfMap_T staffDefs;
 
     //std::vector<StaffGroup_T> staffGrp;
 public:
-    ScoreDefinition_T(){}
+    ScoreDefinition_T() : meterCount(0), meterUnit(0), keySig(""), keyMode("") {};
+    friend std::ostream& operator<< (std::ostream& ostr, const ScoreDefinition_T& sd){
+        ostr << "SCORE DEFINITION:  METER COUNT = " << sd.meterCount;
+        ostr << "  METER UNIT = " << sd.meterUnit;
+        ostr << "  KEY SIG = " << sd.keySig;
+        ostr << "  DEFAULT ACCIDS =";
+        char pname = 'A';
+        for (auto it = sd.defaultAccidentals.begin(); it != sd.defaultAccidentals.end(); ++it){
+            ostr << " " << pname << ": " << *it;
+            pname++;
+        }
+        ostr << "  KEY MODE = " << sd.keyMode;
+        ostr << "\n";
+        for (auto i = sd.staffDefs.begin(); i != sd.staffDefs.end(); ++i) {
+            ostr << i->first << ":" << i->second;
+        }
+        return ostr;
+    }
 };
 
 

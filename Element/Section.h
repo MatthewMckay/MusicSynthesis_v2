@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include "Measure.h"
 
@@ -17,6 +18,15 @@ private:
     std::string n;
 public:
     Section_T(){}
+    friend std::ostream& operator<< (std::ostream& ostr, const Section_T& section){
+        ostr << "SECTION:  n = ";
+        if (section.n.empty()) ostr << "UNDEFINED\n";
+        else ostr << section.n << '\n';
+        for (auto it = section.measures.begin(); it != section.measures.end(); ++it){
+            ostr << *it;
+        }
+        return ostr;
+    }
 };
 
 

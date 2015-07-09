@@ -6,6 +6,7 @@
 #define MUSICSYNTHESIS_V2_DURATION_H
 
 #include <iostream>
+#include <string>
 
 #include "../Constants.h"
 
@@ -37,7 +38,7 @@ public:
         return (double)lhs.numerator/(double)lhs.denominator <
                (double)rhs.numerator/(double)rhs.denominator;
     }
-    friend std::ostream& operator<< (std::ostream& ostr, const TimeFraction_T& duration) {
+    friend std::ostream& operator<< (std::ostream& ostr, TimeFraction_T& duration) {
         if (duration.denominator == 1) ostr << duration.numerator;
         else if (duration.numerator > 0)ostr << duration.numerator << "/" << duration.denominator;
         else ostr << ERR_CLRS << "ERR: uncaught invalid duration" << DFLT_CLRS;
@@ -48,17 +49,21 @@ public:
 class Duration_T {
 protected:
     TimeFraction_T duration;
+    std::string type;
     friend class Processing_T;
 public:
     /**
      * Duration_T constructor set duration to zero time
      */
-    Duration_T(){};
+    Duration_T() {};
 
     double GetDuration() const { return (double)duration.numerator / (double)duration.denominator; }
     TimeFraction_T GetDurationFraction() const {return duration; }
-    //if Duration_T is instantiated with a time this is invalid
+    std::string GetType() const {return type;}
     virtual void   SetDuration(int n, int d);
+    friend std::ostream& operator<< (std::ostream& ostr, const Duration_T& dur) {
+        return ostr;
+    }
 };
 
 

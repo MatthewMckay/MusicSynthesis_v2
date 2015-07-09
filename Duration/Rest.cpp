@@ -6,7 +6,8 @@
 
 std::ostream& operator<< (std::ostream& ostr, const Rest_T & rest)
 {
-    ostr << "DURATION = " << rest.GetDurationFraction();
+    TimeFraction_T tf = rest.GetDurationFraction();
+    ostr << "\t\tREST:  DURATION = " << tf;
     ostr << "\n";
     return ostr;
 }

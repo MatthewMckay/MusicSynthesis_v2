@@ -34,16 +34,27 @@ void Chord_T::DotModify(int dots ) {
     }
 }
 
+TimeFraction_T Chord_T::ReverseDotModify() const{
+    TimeFraction_T tf;
+    if (dots == 0 || duration == tf) return duration;
+    else {
+        tf = duration;
+        tf.numerator = ( tf.numerator + 1 ) >> ( dots + 1 );
+        tf.denominator = tf.denominator >> dots;
+        return tf;
+    }
+}
+
 /**
  * either the chord or the notes within the chord will have duration attributes
  * this makes sure both the chord and notes all have a duration set
  */
-void Chord_T::AddNote(Note_T note) {
+/*void Chord_T::AddNote(Note_T * note) {
     //the chord doesn't have a duration attribute so get it from a note just once
-    if (GetDuration() == 0) SetDuration(note.GetDurationFraction());
+    if (GetDuration() == 0) SetDuration(note->GetDurationFraction());
     else {
         //if
-        if ( note.GetDuration() == 0) note.SetDuration(GetDurationFraction());
+        if ( note->GetDuration() == 0) note->SetDuration(GetDurationFraction());
     }
     notes.push_back(note);
-}
+}*/

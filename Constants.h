@@ -9,6 +9,9 @@
 const std::string ERR_CLRS = "\033[1;48;5;228;38;5;202m";
 const std::string DFLT_CLRS = "\033[0m";
 const int FRAGMENT_LENGTH = 3;
+typedef std::vector<std::string> StrV_T;
+#define SHP(x) std::shared_ptr<x>
+#define SPC(x) std::static_pointer_cast<x>
 
 /**
  * NOTE: E# == Fn  && B# == Cn  Fb == En && Cb == B
@@ -25,7 +28,8 @@ const std::string PROGRESSION = "fcgdaeb";//order of increasing sharps, (its rev
 /**
  * takes in a KeySig value and returns a vector of default accidental values
  */
-std::vector<std::string> GetKeySig (std::string value) {
+
+static StrV_T GetKeySig (std::string value) {
                                                //A B C D E F G
     std::vector<std::string> defaults (7, "n");//0 1 2 3 4 5 6
     //get the number of sharps or flats

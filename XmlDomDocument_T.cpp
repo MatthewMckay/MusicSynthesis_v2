@@ -156,6 +156,10 @@ int XmlDomDocument_T::GetTotalChildCount() const{
     //necessary to not change the current position
     xercesc::DOMElement * temp = c_pos;
     int rval = 0;
+    if(temp->getFirstElementChild()){
+        temp = temp->getFirstElementChild();
+        rval++;
+    }
     while (temp->getNextElementSibling()) {
         temp = temp->getNextElementSibling();
         rval++;

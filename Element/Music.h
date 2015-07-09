@@ -17,6 +17,14 @@ private:
     std::vector<Section_T> sections;
 public:
     Music_T(){}
+    friend std::ostream& operator<< (std::ostream& ostr, const Music_T& music){
+        ostr << "MUSIC:\n";
+        ostr << music.scoreDef;
+        for (auto it = music.sections.begin(); it != music.sections.end(); ++it){
+            ostr << *it;
+        }
+        return ostr;
+    }
 };
 
 

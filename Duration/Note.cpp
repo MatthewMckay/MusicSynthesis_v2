@@ -35,25 +35,41 @@ void Note_T::DotModify(const int& dots ) {
     }
 }
 
+TimeFraction_T Note_T::ReverseDotModify() const{
+    TimeFraction_T tf;
+    if (dots == 0 || duration == tf) return duration;
+    else {
+        tf = duration;
+        tf.numerator = ( tf.numerator + 1 ) >> ( dots + 1 );
+        tf.denominator = tf.denominator >> dots;
+        return tf;
+    }
+}
+
 
 
 //************* Getters **********************
 
 char   Note_T::GetPitch() const { return pitch; }
 
-char   Note_T::GetAccidental() const { return accidental; }
+std::string   Note_T::GetAccidental() const { return accidental; }
 
 int    Note_T::GetOctave() const { return octave; }
 
 
 //************* Operators ********************
 
-std::ostream& operator<< (std::ostream& ostr, const Note_T &note)
+std::ostream& operator<< (std::ostream& ostr,const Note_T &note)
 {
+    ostr << "        NOTE:  ";
     ostr << "PITCH = " << note.pitch;
     ostr << "  ACCIDENTAL = " << note.accidental;
     ostr << "  OCTAVE = " << note.octave;
-    ostr << "  DURATION = " << note.GetDurationFraction();
+    TimeFraction_T tf = note.ReverseDotModify();
+    ostr << "  DURATION = " << tf;
+    ostr << "  DOTS = " << note.dots;
+    tf = note.GetDurationFraction();
+    ostr << "  MODIFIED DURATION = " << tf;
     ostr << "\n";
     return ostr;
 }
