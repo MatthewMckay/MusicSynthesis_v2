@@ -37,7 +37,7 @@ public:
         ostr << "  DEFAULT ACCIDS =";
         char pname = 'A';
         for (auto it = sd.defaultAccidentals.begin(); it != sd.defaultAccidentals.end(); ++it){
-            ostr << " " << pname << ": " << *it;
+            ostr << " " << pname << ":" << *it;
             pname++;
         }
         ostr << "  KEY MODE = " << sd.keyMode;

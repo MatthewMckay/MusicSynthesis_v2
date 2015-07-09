@@ -15,17 +15,17 @@
 class Chord_T : public Duration_T {
 friend class Processing_T;
 private:
-    std::vector<SHP(Note_T)> notes;
+    std::vector<SHP_T(Note_T)> notes;
     int dots;
-    int children;
+    int noteCount;
 public:
-    Chord_T() : dots(0), children(0) {type = "chord";}
+    Chord_T() : dots(0), noteCount(0) {type = "chord";}
     void SetDuration(int d);
     void SetDuration(TimeFraction_T dur);
     void DotModify(int d);
     TimeFraction_T ReverseDotModify() const;
     //void AddNote(SHP(Note_T) note);
-    std::vector<SHP(Note_T)> GetNotes() const {return notes;}
+    std::vector<SHP_T(Note_T)> GetNotes() const {return notes;}
 
     friend std::ostream& operator<< (std::ostream& ostr, const Chord_T& chord) {
         TimeFraction_T tf;
@@ -34,7 +34,7 @@ public:
         ostr << "  DURATION = " << tf;
         ostr << "  DOTS = " << chord.dots;
         tf = chord.GetDurationFraction();
-        ostr << "  MODIFIED DURATION = " << tf << " has ("<<chord.children<<") children\n";
+        ostr << "  MODIFIED DURATION = " << tf << " has ("<<chord.noteCount<<") notes\n";
         for (int i = 0; i < chord.notes.size(); ++i) {
             ostr << "  " << *(chord.notes[i]);
         }
