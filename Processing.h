@@ -9,7 +9,6 @@
 #include <unordered_map>
 #include <set>
 #include <vector>
-#include <stack>
 #include <string>
 #include <exception>
 #include <cstdlib>
@@ -52,6 +51,9 @@
  */
 class Processing_T {
     typedef std::set<const std::string> strSet_T; // this is the type that the XmlDomDocument excepts
+
+    //used to iterate through Score Definition staffDefs
+    typedef std::unordered_map<std::string, StaffDefinition_T>::iterator strStfMapIt_T;
 
 private:
     const static strSet_T tags; // stores the tag names

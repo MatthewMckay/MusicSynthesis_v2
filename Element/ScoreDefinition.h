@@ -13,11 +13,14 @@
 #include "StaffDefinition.h"
 #include "../Constants.h"
 
-typedef std::unordered_map<std::string, StaffDefinition_T>::iterator strStfMapIt_T;
 
+/**
+ * ScoreDefinition_T holds general information about a score that applies to the whole musical piece
+ *      importantly - it holds the default key signature
+ */
 class ScoreDefinition_T {
+    //to make code more readable Processing_T is friended
     friend class Processing_T;
-    friend class ScoreDefinition_T;
 private:
     typedef std::unordered_map<std::string, StaffDefinition_T> strStfMap_T;
     int meterCount;
@@ -29,7 +32,9 @@ private:
 
     //std::vector<StaffGroup_T> staffGrp;
 public:
+    //to ensure a value is in place for error checking these fields are initialized
     ScoreDefinition_T() : meterCount(0), meterUnit(0), keySig(""), keyMode("") {};
+
     friend std::ostream& operator<< (std::ostream& ostr, const ScoreDefinition_T& sd){
         ostr << "SCORE DEFINITION:  METER COUNT = " << sd.meterCount;
         ostr << "  METER UNIT = " << sd.meterUnit;
