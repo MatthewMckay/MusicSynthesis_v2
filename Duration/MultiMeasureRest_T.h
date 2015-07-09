@@ -7,12 +7,24 @@
 
 #include <iostream>
 
+#include "TimeFraction.h"
 #include "Duration.h"
 #include "Rest.h"
 
+//TODO error in logic correct duration fraction. a time fraction indicates a fraction of a beat not measure
+//TODO utilize time signature (meter count, and meter unit)
+
+/**
+ * MultiMeasureRest_T accounts for rests over multiple measures
+ * this is a subclass of Rest_T
+ */
 class MultiMeasureRest_T : public Rest_T{
 public:
+    //Because all duration elements are casted to SHP(Duration_T) to preserve order, Duration_T has the field "type" to
+    //reference in order to cast the pointer back to its original type. all MultiMeasureRest_T have type = "multiRest"
     MultiMeasureRest_T(){type = "multiRest";}
+
+    //time fraction are initialized to 0/1 so the numerator is change to "n" to indicate "n" whole measures
     void SetDuration(int n) { duration.numerator = n; }
 
     friend std::ostream& operator<< (std::ostream& ostr, const MultiMeasureRest_T& mmr) {

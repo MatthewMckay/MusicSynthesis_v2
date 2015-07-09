@@ -12,6 +12,9 @@ std::ostream& operator<< (std::ostream& ostr, const Rest_T & rest)
     return ostr;
 }
 
+/*
+ * a rest may be a fraction of a beat or an entire beat
+ */
 void Rest_T::SetDuration(int d) {
     if (d == 1) duration.numerator = d;
     else {

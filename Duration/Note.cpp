@@ -26,6 +26,7 @@ void Note_T::SetDuration(TimeFraction_T d) {
 /**
  * dots (number of dots n) modify the original duration (dur) with the following equation
  * dur * (2 - (1 / (2^n))) == dur * ((2^(n+1)-1)/(2^n))
+ * TODO add check to avoid double modifications
  */
 void Note_T::DotModify(const int& dots ) {
     if ( dots == 0 ) return;
@@ -35,6 +36,11 @@ void Note_T::DotModify(const int& dots ) {
     }
 }
 
+/**
+ * reverses DotModiy()
+ * dur = ((dur + 1) / 2^-(n+1)) / 2^-n
+ * TODO add check to avoid double modifications
+ */
 TimeFraction_T Note_T::ReverseDotModify() const{
     TimeFraction_T tf;
     if (dots == 0 || duration == tf) return duration;

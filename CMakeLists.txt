@@ -14,7 +14,7 @@ if(Boost_FOUND)
     link_directories(/usr/local/lib)
     include_directories(${Boost_INCLUDE_DIRS} /usr/local/include)
     add_library(libxerces-c.dylib SHARED IMPORTED GLOBAL)
-    add_executable(MusicSynthesis_v2 ${SOURCE_FILES} XmlDomDocument_T.cpp XmlDomDocument_T.h XmlDomErrorHandler_T.cpp XmlDomErrorHandler_T.h Duration/Note.cpp Duration/Note.h Duration/Rest.cpp Duration/Rest.h Element/Measure.h Fragment.cpp Fragment.h Basis.cpp Basis.h Constants.h Duration/Duration.cpp Duration/Duration.h Processing.cpp Processing.h Duration/Chord.cpp Duration/Chord.h Duration/MeasureRest.h Duration/MultiMeasureRest_T.h Duration/MeasureSpace.h Element/Layer.h Element/Music.h Element/ScoreDefinition.h Element/Section.h Element/StaffDefinition.h Element/Staff.h)
+    add_executable(MusicSynthesis_v2 ${SOURCE_FILES} XmlDomDocument_T.cpp XmlDomDocument_T.h XmlDomErrorHandler_T.cpp XmlDomErrorHandler_T.h Duration/Note.cpp Duration/Note.h Duration/Rest.cpp Duration/Rest.h Element/Measure.h Fragment.cpp Fragment.h Basis.cpp Basis.h Constants.h Duration/Duration.cpp Duration/Duration.h Processing.cpp Processing.h Duration/Chord.cpp Duration/Chord.h Duration/MeasureRest.h Duration/MultiMeasureRest_T.h Duration/MeasureSpace.h Element/Layer.h Element/Music.h Element/ScoreDefinition.h Element/Section.h Element/StaffDefinition.h Element/Staff.h Duration/TimeFraction.h)
     target_link_libraries(MusicSynthesis_v2 /usr/local/lib/libxerces-c.dylib ${Boost_FILESYSTEM_LIBRARY})
 endif()
 

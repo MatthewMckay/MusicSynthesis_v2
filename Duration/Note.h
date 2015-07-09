@@ -9,28 +9,40 @@
 #include <fstream>
 #include <string>
 
+#include "TimeFraction.h"
 #include "Duration.h"
 
+/**
+ * Note_T holds necessary information about a note
+ * pitch; accidentals affect pitch
+ * octave
+ * duration; dots affect duration
+ */
 class Note_T : public Duration_T {
 friend class Processing_T;
 private:
-    char pitch;
-    std::string accidental;
-    int octave;
-    int dots;
+    char pitch;             //holds pitch
+    std::string accidental; //holds accidental
+    int octave;             //holds octave
+    int dots;               //needed to reverse modify durations
 public:
-    Note_T() : pitch('\0'), accidental(""), octave(7), dots(0){type = "note";}
-    void SetPitch(char p);
-    void SetAccidental(std::string a);
-    void SetOctave(int o);
-    void SetDuration(int d);
+    //everything is zeroed to check for being set
+    //Because all duration elements are casted to SHP(Duration_T) to preserve order, Duration_T has the field "type" to
+    //reference in order to cast the pointer back to its original type. all Note_T have type = "note"
+    Note_T() : pitch('\0'), accidental(""), octave(0), dots(0){type = "note";}
     void SetDuration(TimeFraction_T d);
     void DotModify(const int& dots);
     TimeFraction_T ReverseDotModify() const;
 
+    //these aren't used just yet
+    /*void SetPitch(char p);
+    void SetAccidental(std::string a);
+    void SetOctave(int o);
+    void SetDuration(int d);
+
     char GetPitch() const;
     std::string GetAccidental() const;
-    int  GetOctave() const;
+    int  GetOctave() const;*/
 
     friend std::ostream& operator<< (std::ostream& ostr, const Note_T & note);
 };

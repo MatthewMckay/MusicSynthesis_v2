@@ -9,58 +9,35 @@
 #include <string>
 
 #include "../Constants.h"
+#include "TimeFraction.h"
+
 
 /**
- * rests use integers in two ways to represent time. for rests within a measure they indicate the denominator (the
- * same way notes use them). mRests, multiRests, and mSpaces use them to indicate whole measures (the numerator)
- * initialize all durations to zero time
- * overload the operator==, operator <, operator >
+ * Duration_T is the base class for all notes and rests
+ * they all share the fields type and duration
  */
-
-struct TimeFraction_T {
-public:
-    int numerator;
-    int denominator;
-    TimeFraction_T() : numerator(0), denominator(1) {}
-    friend bool operator== (const TimeFraction_T& lhs, const TimeFraction_T& rhs) {
-        return (double)lhs.numerator/(double)lhs.denominator ==
-                (double)rhs.numerator/(double)rhs.denominator;
-    }
-    friend bool operator!= (const TimeFraction_T& lhs, const TimeFraction_T& rhs) {
-        return (double)lhs.numerator/(double)lhs.denominator !=
-               (double)rhs.numerator/(double)rhs.denominator;
-    }
-    friend bool operator> (const TimeFraction_T& lhs, const TimeFraction_T& rhs) {
-        return (double)lhs.numerator/(double)lhs.denominator >
-               (double)rhs.numerator/(double)rhs.denominator;
-    }
-    friend bool operator< (const TimeFraction_T& lhs, const TimeFraction_T& rhs) {
-        return (double)lhs.numerator/(double)lhs.denominator <
-               (double)rhs.numerator/(double)rhs.denominator;
-    }
-    friend std::ostream& operator<< (std::ostream& ostr, TimeFraction_T& duration) {
-        if (duration.denominator == 1) ostr << duration.numerator;
-        else if (duration.numerator > 0)ostr << duration.numerator << "/" << duration.denominator;
-        else ostr << ERR_CLRS << "ERR: uncaught invalid duration" << DFLT_CLRS;
-        return ostr;
-    }
-};
-
 class Duration_T {
+//these are protected to allow direct access from subclasses
 protected:
-    TimeFraction_T duration;
-    std::string type;
+    // used to make code more readable
     friend class Processing_T;
+    TimeFraction_T duration;    //duration fraction
+    std::string type;           //holds subclass type
 public:
-    /**
-     * Duration_T constructor set duration to zero time
-     */
     Duration_T() {};
 
+    // this returns the duration in decimal form (will be used when creating basis)
     double GetDuration() const { return (double)duration.numerator / (double)duration.denominator; }
+
+    //this returns the duration as a fraction in "MatheType" form
     TimeFraction_T GetDurationFraction() const {return duration; }
+
+    //this returns the type of Duration_T subclass
     std::string GetType() const {return type;}
+
+    //this isn't ever used as is
     virtual void   SetDuration(int n, int d);
+
     friend std::ostream& operator<< (std::ostream& ostr, const Duration_T& dur) {
         return ostr;
     }
