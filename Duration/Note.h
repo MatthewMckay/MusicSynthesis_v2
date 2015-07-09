@@ -30,7 +30,7 @@ public:
     //Because all duration elements are casted to SHP(Duration_T) to preserve order, Duration_T has the field "type" to
     //reference in order to cast the pointer back to its original type. all Note_T have type = "note"
     Note_T() : pitch('\0'), accidental(""), octave(0), dots(0){type = "note";}
-    void SetDuration(TimeFraction_T d);
+    void SetDuration(int d);
     void DotModify(const int& dots);
     TimeFraction_T ReverseDotModify() const;
 
@@ -38,8 +38,8 @@ public:
     /*void SetPitch(char p);
     void SetAccidental(std::string a);
     void SetOctave(int o);
-    void SetDuration(int d);
 
+    void SetDuration(TimeFraction_T d);
     char GetPitch() const;
     std::string GetAccidental() const;
     int  GetOctave() const;*/

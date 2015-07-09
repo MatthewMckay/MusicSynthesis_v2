@@ -1,37 +1,14 @@
 //
-// Created by Matthew McKay on 6/30/15.
+// Created by Matthew McKay on 7/9/15.
 //
 
-#ifndef MUSICSYNTHESIS_V2_CONSTANTS_H
-#define MUSICSYNTHESIS_V2_CONSTANTS_H
-#include <string>
-#include <vector>
-const std::string ERR_CLRS = "\033[1;48;5;228;38;5;202m";
-const std::string DFLT_CLRS = "\033[0m";
-const int FRAGMENT_LENGTH = 3;
-typedef std::vector<std::string> StrV_T;
-#define SHP_T(x) std::shared_ptr<x>
-#define SPC_(x) std::static_pointer_cast<x>
+#include "KeySignatureDefault.h"
 
-/**
- * NOTE: E# == Fn  && B# == Cn  Fb == En && Cb == B
- */
+const std::string KeySignatureDefault_T::PROGRESSION = "fcgdaeb";//order of increasing sharps, (its reverse for flats)
 
-/**
- * The music fifths dictates that certain pitch names will have accidentals depending on the key signature
- * Each 'n', 's', and 'f' indicates the default accidental for each pitch (string[0] = 'a' through 'g') in
- * each key signature SF0 - F7.
- */
-
-//const std::string PROGRESSION = "fcgdaeb";//order of increasing sharps, (its reverse for flats)
-
-/**
- * takes in a KeySig value and returns a vector of default accidental values
- */
-
-/*static StrV_T GetKeySig (std::string value) {
-                                               //A B C D E F G
-    std::vector<std::string> defaults (7, "n");//0 1 2 3 4 5 6
+StrV_T KeySignatureDefault_T::GetKeySig (std::string value) const{
+                             //A B C D E F G
+    StrV_T defaults (7, "n");//0 1 2 3 4 5 6
     //get the number of sharps or flats
     std::string number = value.substr(0, 1);
     int n = std::stoi(number);
@@ -41,7 +18,7 @@ typedef std::vector<std::string> StrV_T;
         const std::string type = value.substr(1);
         //if there are doubles then there will not be any naturals
         if (type.size() > 1) {
-                //double sharps
+            //double sharps
             if (type[0] == 's'){
                 for (int i = 0; i < n; i++) defaults[PROGRESSION[i]-'a'] = type;
                 for (int i = n; i < PROGRESSION.size(); i++) defaults[PROGRESSION[i]-'a'] = type[0];
@@ -55,7 +32,7 @@ typedef std::vector<std::string> StrV_T;
             }
         }
         else {
-                //sharps
+            //sharps
             if (type[0] == 's'){
                 for (int i = 0; i < n; i++) defaults[PROGRESSION[i]-'a'] = type;
             }
@@ -68,9 +45,4 @@ typedef std::vector<std::string> StrV_T;
         }
         return defaults;
     }
-}*/
-
-
-
-
-#endif //MUSICSYNTHESIS_V2_CONSTANTS_H
+}

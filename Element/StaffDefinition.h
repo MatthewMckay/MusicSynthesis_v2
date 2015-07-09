@@ -15,7 +15,7 @@
  * StaffDefinition_T holds general information about a staff that applies to the whole musical piece
  *      importantly - it holds the default key signature for the staff
  */
-class StaffDefinition_T {
+class StaffDefinition_T : public KeySignatureDefault_T{
     //to make code more readable Processing_T is friended
     friend class Processing_T;
 private:

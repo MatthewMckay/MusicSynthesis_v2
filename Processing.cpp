@@ -104,7 +104,7 @@ void Processing_T::CreateScoreDef() {
         if (!GEA_E("key.mode")) newScoreDef.keyMode = GEA("key.mode");
         else throw "ERR: key mode not specified";
 
-        newScoreDef.defaultAccidentals = GetKeySig(newScoreDef.keySig);
+        newScoreDef.defaultAccidentals = newScoreDef.GetKeySig(newScoreDef.keySig);
     }
     catch (const char * e) {
         std::cerr<< e << '\n';
@@ -137,7 +137,7 @@ void Processing_T::CreateStaffDef() {
         if (!GEA_E("n")) staffDef.n = GEA("n");
         else throw "ERR: staff definitions must have a name \"n\"";
 
-        staffDef.defaultAccidentals = GetKeySig(staffDef.keySig);
+        staffDef.defaultAccidentals = staffDef.GetKeySig(staffDef.keySig);
     }
     catch (const char * e) {
         std::cerr<< e << '\n';

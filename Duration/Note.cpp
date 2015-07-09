@@ -4,7 +4,7 @@
 
 #include "Note.h"
 
-//************* Setters **********************
+/************* Setters **********************
 
 void Note_T::SetPitch(char p) { pitch = p; }
 
@@ -12,15 +12,17 @@ void Note_T::SetAccidental(std::string a) { accidental = a; }
 
 void Note_T::SetOctave(int o) { octave = o; }
 
+void Note_T::SetDuration(TimeFraction_T d) {
+    duration = d;
+}
+*/
+
 void Note_T::SetDuration(int d) {
     if (d == 1) duration.numerator = d;
     else {
         duration.numerator = 1;
         duration.denominator = d;
     }
-}
-void Note_T::SetDuration(TimeFraction_T d) {
-    duration = d;
 }
 
 /**
@@ -54,14 +56,14 @@ TimeFraction_T Note_T::ReverseDotModify() const{
 
 
 
-//************* Getters **********************
+/************* Getters **********************
 
 char   Note_T::GetPitch() const { return pitch; }
 
 std::string   Note_T::GetAccidental() const { return accidental; }
 
 int    Note_T::GetOctave() const { return octave; }
-
+*/
 
 //************* Operators ********************
 

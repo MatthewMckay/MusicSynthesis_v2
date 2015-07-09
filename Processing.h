@@ -14,6 +14,7 @@
 #include <cstdlib>
 
 #include "Constants.h"
+#include "KeySignatureDefault.h"
 #include "Duration/TimeFraction.h"
 #include "Duration/Duration.h"
 #include "Duration/Note.h"

@@ -10,15 +10,16 @@
 #include <string>
 #include <iostream>
 
-#include "StaffDefinition.h"
 #include "../Constants.h"
+#include "../KeySignatureDefault.h"
+#include "StaffDefinition.h"
 
 
 /**
  * ScoreDefinition_T holds general information about a score that applies to the whole musical piece
  *      importantly - it holds the default key signature
  */
-class ScoreDefinition_T {
+class ScoreDefinition_T : public KeySignatureDefault_T{
     //to make code more readable Processing_T is friended
     friend class Processing_T;
 private:
