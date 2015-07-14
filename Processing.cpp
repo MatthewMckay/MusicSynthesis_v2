@@ -93,16 +93,16 @@ void Processing_T::CreateScoreDef() {
 
     try {
         if (!GEA_E("meter.count")) newScoreDef.meterCount = std::stoi(GEA("meter.count"));
-        else throw "ERR: meter count not specified";
+        //else throw "ERR: meter count not specified";
 
         if (!GEA_E("meter.unit")) newScoreDef.meterUnit = std::stoi(GEA("meter.unit"));
-        else throw "ERR: meter unit not specified";
+        //else throw "ERR: meter unit not specified";
 
         if (!GEA_E("key.sig")) newScoreDef.keySig = GEA("key.sig");
-        else throw "ERR: key signature not specified";
+        //else throw "ERR: key signature not specified";
 
         if (!GEA_E("key.mode")) newScoreDef.keyMode = GEA("key.mode");
-        else throw "ERR: key mode not specified";
+        //else throw "ERR: key mode not specified";
 
         newScoreDef.defaultAccidentals = newScoreDef.GetKeySig(newScoreDef.keySig);
     }
@@ -368,7 +368,7 @@ void Processing_T::CreateNote() {
             //strstfMapIt_T = std::unordered_map<std::string, StaffDefinition_T>::iterator
 
             //match staff.n with corresponding staffDef.n
-            strStfMapIt_T it = MUSICB.scoreDef.staffDefs.find(MUSICB.SECTB.MEASB.STAFFB.LAYB.n);
+            strStfMapIt_T it = MUSICB.scoreDef.staffDefs.find(MUSICB.SECTB.MEASB.STAFFB.n);
             if (it != MUSICB.scoreDef.staffDefs.end()) {
                 if (!it->second.keySig.empty()) {
                     //when found use the pitch [(should be lowercase) aka 97 - 103] - 'a' (aka 97) = 0-6
@@ -376,7 +376,7 @@ void Processing_T::CreateNote() {
                     note->accidental = it->second.defaultAccidentals[note->pitch - 'a'];
                 }
             }
-            else throw "ERR: All notes should have durations";
+            else throw "ERR: All notes should have accidentals";
         }
     }
     catch (std::string e) {
@@ -441,4 +441,28 @@ void Processing_T::CreateMultiRest() {
         std::exit(EXIT_FAILURE);
     }
     MUSICB.SECTB.MEASB.STAFFB.LAYB.sequence.push_back(multiRest);
+}
+
+std::vector<SHP_T(Fragment_T)> Processing_T::MakeFragments() {
+    int fragCount = 0;
+    for (auto music_it = music.begin(); music_it != music.end(); ++music_it){
+        for (auto sect_it = music_it->sections.begin(); sect_it != music_it->sections.end(); ++sect_it){
+            int count = 0;
+            for (auto meas_it = sect_it->measures.begin(); meas_it != sect_it->measures.end(); ++meas_it){
+                if (count == FRAGMENT_LENGTH) count = 0;
+                if (count == 0) {
+                    SHP_T(Fragment_T) fragment (new Fragment_T);
+                    fragments.push_back(fragment);
+                    fragCount++;
+                }
+                for (auto seq_it = meas_it->STAFFB.LAYB.sequence.begin();
+                        seq_it != meas_it->STAFFB.LAYB.sequence.end(); ++seq_it){
+                    fragments.back()->AddElement(*seq_it);
+                }
+                count++;
+            }
+        }
+    }
+    std::cout<<fragCount<<'\n';
+    return fragments;
 }

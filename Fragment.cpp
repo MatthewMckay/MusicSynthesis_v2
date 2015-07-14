@@ -4,3 +4,9 @@
 
 #include "Fragment.h"
 
+void Fragment_T::GenerateBasis() {
+    for (auto it = seqFrag.begin(); it != seqFrag.end(); ++it){
+        basis.InputElem(*it);
+    }
+    basis.sizes();
+}

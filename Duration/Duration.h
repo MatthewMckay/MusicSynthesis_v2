@@ -42,6 +42,7 @@ public:
         return ostr;
     }
 };
+typedef std::vector<SHP_T(Duration_T)> VectSHPdur_T;
 
 
 #endif //MUSICSYNTHESIS_V2_DURATION_H

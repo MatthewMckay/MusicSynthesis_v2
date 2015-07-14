@@ -27,7 +27,7 @@ class Layer_T {
     friend class Processing_T;
 private:
     //SHP_T(x) = std::shared_ptr(x)
-    std::vector<SHP_T(Duration_T)> sequence;    //holds the sequence of notes and rests
+    VectSHPdur_T sequence;    //holds the sequence of notes and rests
     std::string n;                              //not used at this time (may be useful when creating fragments
 public:
 

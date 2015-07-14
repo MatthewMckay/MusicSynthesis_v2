@@ -31,6 +31,8 @@
 #include "Element/ScoreDefinition.h"
 #include "Element/Music.h"
 
+#include "Fragment.h"
+
 #include "XmlDomDocument_T.h"
 
 
@@ -61,7 +63,7 @@ private:
     const static strSet_T tags; // stores the tag names
     XmlDomDocument_T * doc;     // points to a document
     std::vector<Music_T> music;  // holds all processed music data
-    //std::vector<SHP(Fragment_T) // holds all fragments generated
+    std::vector<SHP_T(Fragment_T)> fragments;// holds all fragments generated
 
     void CreateMusic();     //creates new music object and pushes it to the music vector
     void CreateScoreDef();  //creates new score definition and puts in back music obj
@@ -86,7 +88,13 @@ private:
 
 public:
     Processing_T(std::vector<const char *> files); //only acceptable constructor
-    void PrintMusic(){ std::cout<<music.back()<<'\n'; } //used to check if
+    void PrintMusic(){
+        for (int k = 0; k < music.size(); ++k)
+        std::cout<<music[k]<<"\n\n\n";
+    } //used to check if
+
+    std::vector<SHP_T(Fragment_T)> MakeFragments();
+
     //TODO create GenerateFragments()
     //TODO create vector<share_ptr<Fragment_T>> GetFragments() const
 

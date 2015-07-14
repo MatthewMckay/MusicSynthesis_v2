@@ -34,17 +34,41 @@ public:
     void DotModify(const int& dots);
     TimeFraction_T ReverseDotModify() const;
 
+    char GetPitch() const;
+    std::string GetAccidental() const;
+    int  GetOctave() const;
+    int GetDots() const;
+
     //these aren't used just yet
     /*void SetPitch(char p);
     void SetAccidental(std::string a);
     void SetOctave(int o);
 
-    void SetDuration(TimeFraction_T d);
-    char GetPitch() const;
-    std::string GetAccidental() const;
-    int  GetOctave() const;*/
+    void SetDuration(TimeFraction_T d);*/
 
     friend std::ostream& operator<< (std::ostream& ostr, const Note_T & note);
+    friend bool operator== (const Note_T &lhs, const Note_T &rhs){
+        return ( lhs.pitch == rhs.pitch &&
+                 lhs.accidental == rhs.accidental &&
+                 lhs.octave == rhs.octave &&
+                 lhs.duration == rhs.duration &&
+                 lhs.dots == rhs.dots );
+    }
+};
+
+struct NoteHash {
+public:
+    std::size_t operator() (const Note_T &note) const {
+        std::string str;
+        str += note.GetPitch();
+        str += note.GetAccidental();
+        str += std::to_string(note.GetOctave());
+        str += std::to_string(note.GetDurationFraction().numerator);
+        str += std::to_string(note.GetDurationFraction().denominator);
+        str += std::to_string(note.GetDots());
+        std::hash<std::string> str_hash;
+        return str_hash(str);
+    }
 };
 
 

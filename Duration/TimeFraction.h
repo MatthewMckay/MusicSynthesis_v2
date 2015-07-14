@@ -43,11 +43,19 @@ public:
     }
 
     //****************************************************************************** stream operator
-    friend std::ostream& operator<< (std::ostream& ostr, TimeFraction_T& duration) {
+    friend std::ostream& operator<< (std::ostream& ostr, const TimeFraction_T& duration) {
         if (duration.denominator == 1) ostr << duration.numerator;
         else if (duration.numerator > 0)ostr << duration.numerator << "/" << duration.denominator;
         else ostr << ERR_CLRS << "ERR: uncaught invalid duration" << DFLT_CLRS;
         return ostr;
+    }
+
+    std::string ToString() const {
+        std::string str = "";
+        str += std::to_string(numerator);
+        str += '/';
+        str += std::to_string(denominator);
+        return str;
     }
 };
 #endif //MUSICSYNTHESIS_V2_TIMEFRACTION_H

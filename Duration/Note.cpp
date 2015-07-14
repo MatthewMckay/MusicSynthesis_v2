@@ -56,14 +56,15 @@ TimeFraction_T Note_T::ReverseDotModify() const{
 
 
 
-/************* Getters **********************
+//************* Getters **********************
 
 char   Note_T::GetPitch() const { return pitch; }
 
 std::string   Note_T::GetAccidental() const { return accidental; }
 
 int    Note_T::GetOctave() const { return octave; }
-*/
+
+int    Note_T::GetDots() const { return dots; }
 
 //************* Operators ********************
 

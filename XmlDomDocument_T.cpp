@@ -30,9 +30,10 @@ XmlDomDocument_T::XmlDomDocument_T(const char * xmlfile) : m_doc(NULL)
 XmlDomDocument_T::~XmlDomDocument_T()
 {
     if (m_doc) m_doc->release();
+    //parser->reset();
     c_pos = nullptr;
     while (!ancestors.empty()) ancestors.pop();
-    xercesc::XMLPlatformUtils::Terminate();
+    //xercesc::XMLPlatformUtils::Terminate();
 }
 
 std::string XmlDomDocument_T::GetChildValue(const char *parentTag, int parentIndex,
