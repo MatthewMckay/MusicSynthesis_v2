@@ -38,13 +38,15 @@ public:
     std::string GetAccidental() const;
     int  GetOctave() const;
     int GetDots() const;
-
-    //these aren't used just yet
-    /*void SetPitch(char p);
+    void SetPitch(char p);
     void SetAccidental(std::string a);
     void SetOctave(int o);
+    void SetDuration(TimeFraction_T d);
+    void SetDots(int d);
 
-    void SetDuration(TimeFraction_T d);*/
+    //these aren't used just yet
+    /*
+*/
 
     friend std::ostream& operator<< (std::ostream& ostr, const Note_T & note);
     friend bool operator== (const Note_T &lhs, const Note_T &rhs){

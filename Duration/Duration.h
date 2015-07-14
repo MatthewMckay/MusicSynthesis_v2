@@ -33,7 +33,7 @@ public:
     TimeFraction_T GetDurationFraction() const {return duration; }
 
     //this returns the type of Duration_T subclass
-    std::string GetType() const {return type;}
+    std::string GetType() const { return type; }
 
     //this isn't ever used as is
     virtual void   SetDuration(int n, int d);

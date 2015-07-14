@@ -25,11 +25,11 @@ struct Tone_T {
 
 struct Dur_T {
     TimeFraction_T timeFraction;
-    int dur;
+    int dots;
     friend bool operator== (const Dur_T &lhs, const Dur_T &rhs) {
         return (lhs.timeFraction.numerator == rhs.timeFraction.numerator &&
                 lhs.timeFraction.denominator == rhs.timeFraction.denominator &&
-                lhs.dur == rhs.dur);
+                lhs.dots == rhs.dots);
     }
     friend bool operator< (const Dur_T &lhs, const Dur_T &rhs) {
         return lhs.timeFraction < rhs.timeFraction;

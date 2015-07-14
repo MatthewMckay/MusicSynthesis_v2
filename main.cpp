@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Globals.h"
 #include "Constants.h"
 #include "Processing.h"
 
@@ -16,5 +17,6 @@ int main() {
     for (auto it = fragments.begin(); it != fragments.end(); ++it){
         (*it)->GenerateBasis();
     }
+    std::cout << "\n\n************************\ntotal pointers = " << global_shpCt << '\n';
     return 0;
 }

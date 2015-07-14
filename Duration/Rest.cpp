@@ -22,3 +22,5 @@ void Rest_T::SetDuration(int d) {
         duration.denominator = d;
     }
 }
+
+void Rest_T::SetDuration(TimeFraction_T tf) { duration = tf; }

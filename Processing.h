@@ -36,6 +36,7 @@
 #include "XmlDomDocument_T.h"
 
 
+extern unsigned long long global_shpCt;
 /**
  * Processing_T is instantiated with a vector of file names
  *
@@ -87,6 +88,7 @@ private:
     Processing_T(){}; //ensures that this must be instantiated with an argument
 
 public:
+
     Processing_T(std::vector<const char *> files); //only acceptable constructor
     void PrintMusic(){
         for (int k = 0; k < music.size(); ++k)

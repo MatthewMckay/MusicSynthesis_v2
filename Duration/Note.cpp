@@ -4,7 +4,7 @@
 
 #include "Note.h"
 
-/************* Setters **********************
+//************* Setters **********************
 
 void Note_T::SetPitch(char p) { pitch = p; }
 
@@ -15,7 +15,6 @@ void Note_T::SetOctave(int o) { octave = o; }
 void Note_T::SetDuration(TimeFraction_T d) {
     duration = d;
 }
-*/
 
 void Note_T::SetDuration(int d) {
     if (d == 1) duration.numerator = d;
@@ -24,6 +23,8 @@ void Note_T::SetDuration(int d) {
         duration.denominator = d;
     }
 }
+
+void Note_T::SetDots(int d) { dots = d; }
 
 /**
  * dots (number of dots n) modify the original duration (dur) with the following equation

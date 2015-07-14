@@ -214,8 +214,10 @@ void Processing_T::CreateLayer() {
  */
 //“dur”,”dots"
 void Processing_T::CreateChord() {
+    
     //SHP_T(x) = std::shared_ptr<x>
     SHP_T(Chord_T) chord (new Chord_T);
+    global_shpCt++;
     TimeFraction_T tf;
     try {
         // if this chord element has a duration attribute set the chord duration
@@ -258,11 +260,13 @@ void Processing_T::CreateChord() {
  */
 //SHP_T(x) = std::shared_ptr<x>
 SHP_T(Note_T) Processing_T::AddChordNote(TimeFraction_T &chordDur, int &chordDots) {
+    
     //advances document position
     doc->FirstDescendantNamed(tags);
 
     //creates new note
     SHP_T(Note_T) note (new Note_T);
+    global_shpCt++;
 
     //TimeFraction_T are initialized to numerator = 0, denominator = 1 (aka 0)
     //used for checking durations have been set
@@ -339,8 +343,10 @@ SHP_T(Note_T) Processing_T::AddChordNote(TimeFraction_T &chordDur, int &chordDot
  */
 //SHP_T(x) = std::shared_ptr<x>
 void Processing_T::CreateNote() {
+    
     //create a new note
     SHP_T(Note_T) note (new Note_T);
+    global_shpCt++;
     try {
         //set pitch
         if (!GEA_E("pname"))note->pitch = GEA("pname")[0];
@@ -392,7 +398,9 @@ void Processing_T::CreateNote() {
  *      duration    TimeFraction_T mandatory
  */
 void Processing_T::CreateRest() {
+    
     SHP_T(Rest_T) rest (new Rest_T);
+    global_shpCt++;
     try {
         if (!GEA_E("dur")) rest->SetDuration(std::stoi(GEA("dur")));
         //else throw "ERR: All rests must have durations";
@@ -409,7 +417,9 @@ void Processing_T::CreateRest() {
  * Creates Measure rest obj
  */
 void Processing_T::CreateMRest() {
+    
     SHP_T(MeasureRest_T) mRest (new MeasureRest_T);
+    global_shpCt++;
     mRest->SetDuration();
 
     MUSICB.SECTB.MEASB.STAFFB.LAYB.sequence.push_back(mRest);
@@ -419,7 +429,9 @@ void Processing_T::CreateMRest() {
  * Creates measure space obj
  */
 void Processing_T::CreateMSpace() {
+    
     SHP_T(MeasureSpace_T) mSpace (new MeasureSpace_T);
+    global_shpCt++;
     mSpace->SetDuration();
 
     MUSICB.SECTB.MEASB.STAFFB.LAYB.sequence.push_back(mSpace);
@@ -431,7 +443,9 @@ void Processing_T::CreateMSpace() {
  *      duration    TimeFraction_T mandatory
  */
 void Processing_T::CreateMultiRest() {
+    
     SHP_T(MultiMeasureRest_T) multiRest (new MultiMeasureRest_T);
+    global_shpCt++;
     try {
         if (!GEA_E("num")) multiRest->SetDuration(std::stoi(GEA("num")));
         else throw "ERR: All multi-measure rests must have a duration";
@@ -444,6 +458,7 @@ void Processing_T::CreateMultiRest() {
 }
 
 std::vector<SHP_T(Fragment_T)> Processing_T::MakeFragments() {
+    
     int fragCount = 0;
     for (auto music_it = music.begin(); music_it != music.end(); ++music_it){
         for (auto sect_it = music_it->sections.begin(); sect_it != music_it->sections.end(); ++sect_it){
@@ -452,6 +467,7 @@ std::vector<SHP_T(Fragment_T)> Processing_T::MakeFragments() {
                 if (count == FRAGMENT_LENGTH) count = 0;
                 if (count == 0) {
                     SHP_T(Fragment_T) fragment (new Fragment_T);
+                    global_shpCt++;
                     fragments.push_back(fragment);
                     fragCount++;
                 }
