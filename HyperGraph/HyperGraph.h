@@ -6,7 +6,10 @@
 #define MUSICSYNTHESIS_V2_HYPERGRAPH_H
 
 
+template <class T, class A>
 class HyperGraph {
+private:
+public:
 
 };
 
