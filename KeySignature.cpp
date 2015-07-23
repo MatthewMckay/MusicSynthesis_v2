@@ -231,12 +231,12 @@ const std::vector<int> KeySignature_T::GetNextPossibleChords(){
         if (keyMode == "major"){
             switch(currentChord){
                 case 1 : return {1,2,3,4,5,6,7};
-                case 2 : return {5,7};
-                case 3 : return {6};
-                case 4 : return {5,7};
-                case 5 : return {1};
-                case 6 : return {2,4};
-                case 7 : return {1,3};
+                case 2 : return {2,5,7};
+                case 3 : return {3,6};
+                case 4 : return {4,5,7};
+                case 5 : return {1,5};
+                case 6 : return {2,4,6};
+                case 7 : return {1,3,7};
                 default: return {1};
             }
         }

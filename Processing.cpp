@@ -103,8 +103,8 @@ void Processing_T::CreateScoreDef() {
 
         if (!GEA_E("key.mode")) newScoreDef.keyMode = GEA("key.mode");
         //else throw "ERR: key mode not specified";
-
-        newScoreDef.defaultAccidentals = newScoreDef.GetKeySig(newScoreDef.keySig);
+        newScoreDef.SetKeySignature();
+        newScoreDef.defaultAccidentals = newScoreDef.GetKeySig();
     }
     catch (const char * e) {
         std::cerr<< e << '\n';
@@ -137,7 +137,9 @@ void Processing_T::CreateStaffDef() {
         if (!GEA_E("n")) staffDef.n = GEA("n");
         else throw "ERR: staff definitions must have a name \"n\"";
 
-        staffDef.defaultAccidentals = staffDef.GetKeySig(staffDef.keySig);
+        staffDef.keyMode = MUSICB.scoreDef.keyMode;
+        staffDef.SetKeySignature();
+        staffDef.defaultAccidentals = staffDef.GetKeySig();
     }
     catch (const char * e) {
         std::cerr<< e << '\n';

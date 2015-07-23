@@ -23,6 +23,8 @@ typedef CyclicArray_T<int> CAInt_T;
 #define FLATS {"b","e","a","d","g","c","f"}
 
 class KeySignature_T {
+protected:
+    friend class Processing_T;
 private:
     static const CAStr_T Scale_C;           //holds a - g in order
     static const CAInt_T ScaleDistRef_C;    //holds number of half tones to get to next pitch
@@ -43,8 +45,8 @@ private:
                                             // ie. Bs = C : Aff = G : Dsf = D : Fs = Fs
     const std::vector<int> GetNextPossibleChords();     //returns possible chords based on common chord progression theory
 
-    KeySignature_T(){}; //constructor must have arguments
 public:
+    KeySignature_T(){};
     KeySignature_T(std::string keySig, std::string mode); //sets keySignature, keyMode, adjuster, and chordPitches
 
     const int AdjustedI(int i) const;   //returns an unscrambled index

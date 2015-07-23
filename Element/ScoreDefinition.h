@@ -11,7 +11,8 @@
 #include <iostream>
 
 #include "../Constants.h"
-#include "../KeySignatureDefault.h"
+#include "../KeySignature.h"
+//#include "../KeySignatureDefault.h"
 #include "StaffDefinition.h"
 
 
@@ -19,11 +20,12 @@
  * ScoreDefinition_T holds general information about a score that applies to the whole musical piece
  *      importantly - it holds the default key signature
  */
-class ScoreDefinition_T : public KeySignatureDefault_T{
+class ScoreDefinition_T {//: public KeySignatureDefault_T{
     //to make code more readable Processing_T is friended
     friend class Processing_T;
 private:
     typedef std::unordered_map<std::string, StaffDefinition_T> strStfMap_T;
+    KeySignature_T keySignature;
     int meterCount;             //how many beats
     int meterUnit;              //length of beat
     std::string keySig;         //i.e. "1s" = 1 sharp
@@ -35,6 +37,11 @@ private:
 public:
     //to ensure a value is in place for error checking these fields are initialized
     ScoreDefinition_T() : meterCount(0), meterUnit(0), keySig(""), keyMode("") {};
+    void SetKeySignature(){
+        KeySignature_T newKeySig(keySig, keyMode);
+        keySignature = newKeySig;
+    }
+    const StrV_T GetKeySig() { return keySignature.GetKeySig(); }
 
     friend std::ostream& operator<< (std::ostream& ostr, const ScoreDefinition_T& sd){
         ostr << "SCORE DEFINITION:  METER COUNT = " << sd.meterCount;
