@@ -98,6 +98,69 @@ KeySignature_T::KeySignature_T(std::string keySig, std::string mode){
     else std::cout<<"ERR: keysig must start with a number\n";
 }
 
+void KeySignature_T::Initialize(std::string keySig, std::string mode){
+    CAStr_T rval SCALE;     //return value, cyclic array initialized to {a,b,c,d,e,f,g}
+    keyMode = mode;         //sets key signature mode
+    int accidPos = 0;       /* (keySig is in the form  X(s/f) where X is a string integer)
+                             * holds accidental spot in string
+                             */
+    //iterate through the keySig input and find the accidental index
+    for (auto i : keySig){
+        if (i != 's' && i != 'f') accidPos++;
+    }
+
+    //an accidPos < 1 indicates an error
+    if ( accidPos > 0 ) {
+        //retrieve accidental count
+        int accidentalCt = std::stoi(keySig.substr(0, (unsigned long) accidPos));
+        //if the accidental has a repeated letter, every letter - 1 is attached to every pitch
+        accidentalCt = accidentalCt + (keySig.substr(accidPos, keySig.size() - accidPos).size()-1) * 7;
+
+        //0 indicates C Major or a minor
+        if (keySig.length() == 1) {
+            if (mode == "major") {
+                rval.Shift('c' - 'a');
+                adjuster = 'c' - 'a';
+            }
+            else adjuster = 0;
+        }
+            //handle sharps
+        else if (keySig[accidPos] == 's') {
+            CAStr_T temp = SharProg_C;          // f c g d a e b
+            for (int i = 0; i < accidentalCt; i++) {
+                rval[temp[i][0] - 'a'] += 's';
+            }
+            if (mode == "major") {              //ex: accidentalCt = 1
+                temp.Shift(accidentalCt + 1);   //temp = g d a e b f c
+                adjuster = temp[0][0] - 'a';    //'g' - 'a' = 7
+            }
+            else {
+                temp.Shift(accidentalCt + 4);   //temp = e b f c g d a
+                adjuster = temp[0][0] - 'a';    //
+            }
+            rval.Shift(tolower(temp[0][0]) - 'a');
+        }
+        else if (keySig[accidPos] == 'f') {
+            CAStr_T temp = FlatProg_C;          // b e a d g c f
+            for (int i = 0; i < accidentalCt; i++) {
+                rval[temp[i][0] - 'a'] += 'f';
+            }
+            //all scales of like modes and accidentals shift the progression array the same
+            if (mode == "major") {              //ex: accidentalCt = 1
+                temp.Shift(accidentalCt + 5);   //temp = f b e a d g c f
+                adjuster = temp[0][0] - 'a';
+            }
+            else {
+                temp.Shift(accidentalCt + 2);
+                adjuster = temp[0][0] - 'a';
+            }
+            rval.Shift(tolower(temp[0][0]) - 'a');
+        }
+        keySignature = rval;
+        MakeChordPitches();
+    }
+    else std::cout<<"ERR: keysig must start with a number\n";
+}
 
 void KeySignature_T::MakeChordPitches(){
     /*
@@ -204,6 +267,7 @@ void KeySignature_T::Simplify(std::string &str) const{
             }
         }
     }
+    if (str.size() == 1) { str += 'n';}
 }
 
 /*

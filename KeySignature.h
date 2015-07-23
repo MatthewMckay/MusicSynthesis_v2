@@ -49,6 +49,8 @@ public:
     KeySignature_T(){};
     KeySignature_T(std::string keySig, std::string mode); //sets keySignature, keyMode, adjuster, and chordPitches
 
+    void Initialize(std::string keySig, std::string mode);
+
     const int AdjustedI(int i) const;   //returns an unscrambled index
     void  DetermineCurrentChord(const std::string &pitch);  //if starting chord is unknown, guess from used notes
     const std::vector<std::string> GetNextPossibleNotes();  //returns a set of valid next notes to try

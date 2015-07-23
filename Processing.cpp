@@ -331,6 +331,10 @@ SHP_T(Note_T) Processing_T::AddChordNote(TimeFraction_T &chordDur, int &chordDot
         std::cerr << ERR_CLRS << e << DFLT_CLRS << '\n';
         std::exit(EXIT_FAILURE);
     }
+    std::string simplified = note->pitch + note->accidental;
+    MUSICB.scoreDef.keySignature.Simplify(simplified);
+    note->pitch = simplified[0];
+    if(simplified.size() > 1) note->accidental = simplified.substr(1,simplified.size()-1);
     return note;
 }
 
@@ -391,6 +395,10 @@ void Processing_T::CreateNote() {
         std::cerr << ERR_CLRS << e << DFLT_CLRS << '\n';
         std::exit(EXIT_FAILURE);
     }
+    std::string simplified = note->pitch + note->accidental;
+    MUSICB.scoreDef.keySignature.Simplify(simplified);
+    note->pitch = simplified[0];
+    if(simplified.size() > 1) note->accidental = simplified.substr(1,simplified.size()-1);
     MUSICB.SECTB.MEASB.STAFFB.LAYB.sequence.push_back(note);
 }
 
@@ -469,6 +477,8 @@ std::vector<SHP_T(Fragment_T)> Processing_T::MakeFragments() {
                 if (count == FRAGMENT_LENGTH) count = 0;
                 if (count == 0) {
                     SHP_T(Fragment_T) fragment (new Fragment_T);
+                    strStfMapIt_T it = MUSICB.scoreDef.staffDefs.find(meas_it->STAFFB.n);
+                    fragment->Initialize(it->second.keySig, it->second.keyMode);
                     global_shpCt++;
                     fragments.push_back(fragment);
                     fragCount++;
@@ -481,6 +491,5 @@ std::vector<SHP_T(Fragment_T)> Processing_T::MakeFragments() {
             }
         }
     }
-    std::cout<<fragCount<<'\n';
     return fragments;
 }

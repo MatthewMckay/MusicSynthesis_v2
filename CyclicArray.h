@@ -29,9 +29,15 @@ public:
     //overloaded access operators i.e CyclicArray A{a,b,c,d,e} A[0] = a A[6] = a b c d e a (b)
     //                                                         modified index: 0 1 2 3 4 0  1
     // the modified index fits in data
-    T& operator[] (int i) { return data[i % data.size()]; }
+    T& operator[] (int i) {
+        while (i < 0) i += data.size();
+        return data[i % data.size()];
+    }
 
-    const T& operator[] (int i) const{ return data[i % data.size()]; }
+    const T& operator[] (int i) const{
+        while (i < 0) i += data.size();
+        return data[i % data.size()];
+    }
 
     // changes the beginning index
     void Shift(const int &amt) {
