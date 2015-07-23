@@ -21,7 +21,8 @@ if(Boost_FOUND)
     Duration/Chord.h Duration/MeasureRest.h Duration/MultiMeasureRest_T.h Duration/MeasureSpace.h Element/Layer.h
     Element/Music.h Element/ScoreDefinition.h Element/Section.h Element/StaffDefinition.h Element/Staff.h
     Duration/TimeFraction.h Globals.cpp Globals.h HyperGraph/HyperEdge.h HyperGraph/HyperEdge.cpp
-    HyperGraph/HyperNode.h HyperGraph/HyperNode.cpp HyperGraph/HyperGraph.h HyperGraph/HyperGraph.cpp CyclicArray.h)
+    HyperGraph/HyperNode.h HyperGraph/HyperNode.cpp HyperGraph/HyperGraph.h HyperGraph/HyperGraph.cpp
+    CyclicArray.h KeySignature.h KeySignature.cpp)
     target_link_libraries(MusicSynthesis_v2 /usr/local/lib/libxerces-c.dylib ${Boost_FILESYSTEM_LIBRARY})
 endif()
 
