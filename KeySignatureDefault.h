@@ -19,5 +19,6 @@ protected:
     StrV_T GetKeySig (std::string value) const;
 };
 
+//an octave is from pitch to same pitch abcdefg a   bcdefga b etc
 
 #endif //MUSICSYNTHESIS_V2_KEYSIGNATUREDEFAULT_H

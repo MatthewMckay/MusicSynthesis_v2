@@ -11,9 +11,14 @@ template <class A>
 class HyperEdge_T {
 public:
     typedef std::vector<int> vInt;
+
+    //****************** variables
     int  targetNode;
     vInt sourceNodes;
     A    annotation;
+
+    //****************** methods
+    HyperEdge_T(const vInt &source, int target, const A &annotation);
 };
 
 

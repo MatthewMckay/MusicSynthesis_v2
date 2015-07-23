@@ -13,10 +13,11 @@
 template <class T, class A>
 class HyperNode_T {
 public:
-    typedef std::vector<HyperEdge_T<A>> vHypeE;
+    typedef std::vector<HyperEdge_T<A>> vHypeE_T;
     T      data;
     int    id;
-    vHypeE edges;
+    vHypeE_T edges;
+    HyperNode_T(const T& d, int i) : data(d), id(i) {}
 };
 
 
