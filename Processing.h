@@ -41,7 +41,7 @@ extern unsigned long long global_shpCt;
  * Processing_T is instantiated with a vector of file names
  *
  * this object holds the original music data in the correct order
- * TODO this object provides methods for extracting fragments
+ * this object provides methods for extracting fragments
  *
  * for each file:
  * 1 - it creates a new XmlDomDocument
@@ -52,7 +52,7 @@ extern unsigned long long global_shpCt;
  *          i   - it pulls the appropriate attributes for the found element
  *          ii  - the element creates a matching object and added to the music object
  * 3 - the document is deleted and the next file is processed
- * 4 - TODO fragments are created
+ * 4 - fragments are created
  */
 class Processing_T {
     typedef std::set<const std::string> strSet_T; // this is the type that the XmlDomDocument excepts
@@ -97,8 +97,6 @@ public:
 
     std::vector<SHP_T(Fragment_T)> MakeFragments();
 
-    //TODO create GenerateFragments()
-    //TODO create vector<share_ptr<Fragment_T>> GetFragments() const
 
 private:
     //These are the typical and necessary element tag names found in an MEI XML file

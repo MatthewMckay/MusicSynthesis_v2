@@ -16,7 +16,9 @@ class HyperGraph_T {
 public:
     typedef std::vector<HyperNode_T<T,A>> vHypeN_T;
     vHypeN_T vertices;
-    IntBool_T AddNode(const T &inputData);
+    IntBool_T AddNode(const T &inputData) {
+        int id = vertices.size();
+    }
 };
 
 

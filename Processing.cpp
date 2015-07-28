@@ -86,7 +86,7 @@ void Processing_T::CreateMusic() {
  *      staffDefs    unordered_map<string n, StaffDefinition_T>
  *
  * WORKS FOR MOST CASES
- * TODO add method for extracting key signature from a combination of key pitch, key accidental, and key mode;
+ * method for extracting key signature from a combination of key pitch, key accidental, and key mode;
  */
 void Processing_T::CreateScoreDef() {
     ScoreDefinition_T newScoreDef;
@@ -428,9 +428,8 @@ void Processing_T::CreateRest() {
  */
 void Processing_T::CreateMRest() {
     
-    SHP_T(MeasureRest_T) mRest (new MeasureRest_T);
+    SHP_T(MeasureRest_T) mRest (new MeasureRest_T(MUSICB.scoreDef.meterCount, MUSICB.scoreDef.meterUnit));
     global_shpCt++;
-    mRest->SetDuration();
 
     MUSICB.SECTB.MEASB.STAFFB.LAYB.sequence.push_back(mRest);
 }
@@ -440,9 +439,8 @@ void Processing_T::CreateMRest() {
  */
 void Processing_T::CreateMSpace() {
     
-    SHP_T(MeasureSpace_T) mSpace (new MeasureSpace_T);
+    SHP_T(MeasureSpace_T) mSpace (new MeasureSpace_T(MUSICB.scoreDef.meterCount, MUSICB.scoreDef.meterUnit));
     global_shpCt++;
-    mSpace->SetDuration();
 
     MUSICB.SECTB.MEASB.STAFFB.LAYB.sequence.push_back(mSpace);
 }
@@ -454,7 +452,7 @@ void Processing_T::CreateMSpace() {
  */
 void Processing_T::CreateMultiRest() {
     
-    SHP_T(MultiMeasureRest_T) multiRest (new MultiMeasureRest_T);
+    SHP_T(MultiMeasureRest_T) multiRest (new MultiMeasureRest_T(MUSICB.scoreDef.meterCount, MUSICB.scoreDef.meterUnit));
     global_shpCt++;
     try {
         if (!GEA_E("num")) multiRest->SetDuration(std::stoi(GEA("num")));
