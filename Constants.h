@@ -14,4 +14,5 @@ typedef std::pair<int,bool> IntBool_T;
 #define SHP_T(x) std::shared_ptr<x>
 #define SPC_(x) std::static_pointer_cast<x>
 
+
 #endif //MUSICSYNTHESIS_V2_CONSTANTS_H

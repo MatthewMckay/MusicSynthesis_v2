@@ -173,7 +173,7 @@ void KeySignature_T::MakeChordPitches(){
         std::vector<std::string> diatonicChord; //holds pitches that make the diatonic chord
 
         for (auto subItem : item){              //subItem is an integer index + 1
-            diatonicChord.push_back(keySignature[subItem -1]);
+            diatonicChord.push_back(keySignature[subItem - 1]);
         }
         chordPitches.push_back(diatonicChord);
     }
@@ -274,6 +274,7 @@ void KeySignature_T::Simplify(std::string &str) const{
  * guess the current chord based on current pitch. integers represent chord I - VII
  */
 void KeySignature_T::DetermineCurrentChord(const std::string &pitch) {
+    std::cout<<pitch<<std::endl;
     int pitchNum = AdjustedI(pitch[0] - keySignature[0][0]) + 1;
     switch (pitchNum){
         case 1 : currentChord = 1; break;
@@ -285,6 +286,16 @@ void KeySignature_T::DetermineCurrentChord(const std::string &pitch) {
         case 7 : currentChord = 5; break;
         default: currentChord = 1;
     }
+    std::cout<<currentChord<<'\n';
+}
+
+std::vector<std::string> KeySignature_T::GetTonesInCurrentChord() const{
+    std::vector<std::string> rvals;
+    rvals = chordPitches[currentChord-1];
+    for (int i = 0; i < rvals.size(); ++i){
+        Simplify(rvals[i]);
+    }
+    return rvals;
 }
 
 /*

@@ -23,6 +23,7 @@ public:
     MultiMeasureRest_T(int n, int d){
         duration.numerator = n;
         duration.denominator = d;
+        duration.Simplify();
         type = "multiRest";
     }
 

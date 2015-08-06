@@ -484,10 +484,14 @@ std::vector<SHP_T(Fragment_T)> Processing_T::MakeFragments() {
                 for (auto seq_it = meas_it->STAFFB.LAYB.sequence.begin();
                         seq_it != meas_it->STAFFB.LAYB.sequence.end(); ++seq_it){
                     fragments.back()->AddElement(*seq_it);
+                    fragments.back()->length += (*seq_it)->duration;
                 }
                 count++;
             }
         }
+    }
+    for (auto i : fragments){
+        //std::cout<<i->length<<std::endl;
     }
     return fragments;
 }

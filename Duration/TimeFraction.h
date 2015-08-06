@@ -47,6 +47,15 @@ public:
         lt.Simplify();
         return lt;
     }
+    friend TimeFraction_T operator+ (const TimeFraction_T &lhs, const TimeFraction_T& rhs){
+        TimeFraction_T lt = lhs, rt = rhs;
+        lt.numerator *= rt.denominator;
+        rt.numerator *= lt.denominator;
+        lt.denominator *= rt.denominator;
+        lt.numerator += rt.numerator;
+        lt.Simplify();
+        return lt;
+    }
     friend TimeFraction_T operator* (const TimeFraction_T &lhs, const int &rhs){
         TimeFraction_T tf = lhs;
         tf.numerator *= rhs;
@@ -70,6 +79,15 @@ public:
         Simplify();
         return *this;
     }
+    TimeFraction_T& operator+= (const TimeFraction_T &rhs){
+        TimeFraction_T rt = rhs;
+        numerator *= rt.denominator;
+        rt.numerator *=denominator;
+        denominator *= rt.denominator;
+        numerator += rt.numerator;
+        Simplify();
+        return *this;
+    }
 
     //***************************************************************************** comparison operators
     friend bool operator== (const TimeFraction_T& lhs, const TimeFraction_T& rhs) {
@@ -88,7 +106,9 @@ public:
         return (double)lhs.numerator/(double)lhs.denominator <
                (double)rhs.numerator/(double)rhs.denominator;
     }
-
+    friend bool operator<= (const TimeFraction_T& lhs, const TimeFraction_T& rhs) {
+        return lhs < rhs || lhs == rhs;
+    }
     //****************************************************************************** stream operator
     friend std::ostream& operator<< (std::ostream& ostr, const TimeFraction_T& duration) {
         ostr << duration.numerator << "/" << duration.denominator;

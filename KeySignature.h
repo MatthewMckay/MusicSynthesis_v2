@@ -53,6 +53,7 @@ public:
 
     const int AdjustedI(int i) const;   //returns an unscrambled index
     void  DetermineCurrentChord(const std::string &pitch);  //if starting chord is unknown, guess from used notes
+    std::vector<std::string> GetTonesInCurrentChord() const;
     const std::vector<std::string> GetNextPossibleNotes();  //returns a set of valid next notes to try
 
     //this was made to tie this into the existing project

@@ -32,7 +32,7 @@ void Note_T::SetDots(int d) { dots = d; }
  * TODO add check to avoid double modifications
  */
 void Note_T::DotModify(const int& dots ) {
-    if ( dots == 0 ) return;
+    if ( dots == 0 || duration.numerator > 1) return;
     else{
         duration.numerator = ( duration.numerator << ( dots + 1 ) ) - 1;
         duration.denominator = duration.denominator << dots;

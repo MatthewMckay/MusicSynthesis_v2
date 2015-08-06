@@ -9,17 +9,5 @@ void Fragment_T::GenerateBasis() {
         basis.InputElem(*it);
     }
     basis.MakeBasis();
-    std::cout << basis << "\n\n\n";
-}
-
-void Fragment_T::Synthesize() {
-    hypergraph.AddNode(seqFrag[0]);
-    hypergraph.AddNode(seqFrag[1]);
-    std::string str;
-    if (seqFrag[1]->GetType() == "note") {
-        str = SPC_(Note_T)(seqFrag[0])->GetPitch();
-        str += SPC_(Note_T)(seqFrag[0])->GetAccidental();
-        DetermineCurrentChord(str);
-    }
-
+    //std::cout << basis << "\n\n\n";
 }

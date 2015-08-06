@@ -23,6 +23,7 @@ public:
     MeasureRest_T(const int &n, const int &d) {
         duration.numerator = n;
         duration.denominator = d;
+        duration.Simplify();
         type = "mRest";
     }
 

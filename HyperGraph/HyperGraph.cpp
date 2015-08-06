@@ -3,8 +3,8 @@
 //
 
 #include "HyperGraph.h"
-
-/*template <class T,class A>
-IntBool_T HyperGraph_T<T,A>::AddNode(const T &inputData) {
-    int id = vertices.size();
-}*/
+unsigned int HyperGraph_T::AddNode(const std::vector<unsigned int> &sequence){
+    HyperNode_T node(sequence);
+    vertices.push_back(node);
+    return (unsigned int) vertices.size() - 1;
+}

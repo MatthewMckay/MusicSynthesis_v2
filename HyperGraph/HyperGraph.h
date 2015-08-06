@@ -6,19 +6,40 @@
 #define MUSICSYNTHESIS_V2_HYPERGRAPH_H
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 #include "../Constants.h"
 #include "HyperEdge.h"
 #include "HyperNode.h"
+#include "../Constants.h"
+#include "../KeySignatureDefault.h"
+#include "../Duration/TimeFraction.h"
+#include "../Duration/Duration.h"
+#include "../Duration/Note.h"
+#include "../Duration/Chord.h"
+#include "../Duration/Rest.h"
+#include "../Duration/MeasureRest.h"
+#include "../Duration/MeasureSpace.h"
+#include "../Duration/MultiMeasureRest_T.h"
 
-template <class T, class A>
+#include "../Fragment.h"
+
+
 class HyperGraph_T {
-public:
-    typedef std::vector<HyperNode_T<T,A>> vHypeN_T;
-    vHypeN_T vertices;
-    IntBool_T AddNode(const T &inputData) {
-        int id = vertices.size();
+private:
+    unsigned int Extract(unsigned int num, const int &digit, const int &count) {
+        if (digit > 1) num /= (unsigned int) pow(10, digit - 1);
+        num %= (unsigned int) pow(10, count);
+        return num;
     }
+    SHP_T(Fragment_T) fragment;
+public:
+    HyperGraph_T(){}
+
+    typedef std::vector<HyperNode_T> VHyperN_T;
+    VHyperN_T vertices;
+
+    unsigned int AddNode(const std::vector<unsigned int> &sequence);
 };
 
 

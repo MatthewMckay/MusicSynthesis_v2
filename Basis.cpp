@@ -12,9 +12,11 @@ void Basis_T::InputElem(SHP_T(Duration_T) elem) {
             Dur_T dur;
             tone.pitch = toupper((*it)->GetPitch());
             tone.accid = (*it)->GetAccidental();
+            tones.insert(tone);
             octaves.insert((*it)->GetOctave());
             dur.timeFraction = (*it)->GetDurationFraction();
             dur.dots = (*it)->GetDots();
+            nDurations.insert(dur);
         }
     }
     else if (elem->GetType() == "note") {
@@ -53,6 +55,5 @@ void Basis_T::MakeBasis() {
         global_shpCt++;
         rest->SetDuration(*rest_it);
         completeBasis.push_back(rest);
-        std::cout<<completeBasis.size()<<"  ";
     }
 }

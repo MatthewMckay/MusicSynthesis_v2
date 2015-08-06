@@ -2,6 +2,8 @@
 #include "Globals.h"
 #include "Constants.h"
 #include "Processing.h"
+#include "HyperGraph/HyperGraph.h"
+#include "HyperGraph/Instantiate.h"
 
 int main() {
     //Fragment_T fragment("/Users/MatthewMcKay/ClionProjects/MEIXMLparser/test.xml");
@@ -16,6 +18,8 @@ int main() {
     fragments = process.MakeFragments();
     for (auto it = fragments.begin(); it != fragments.end(); ++it){
         (*it)->GenerateBasis();
+        Instantiate_T instantiate_t(*it);
+        std::cout<<instantiate_t.graph.vertices.size()<<"\n\n";
     }
     std::cout << "\n\n************************\ntotal pointers = " << global_shpCt << '\n';
     return 0;

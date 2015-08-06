@@ -7,18 +7,15 @@
 #include <iostream>
 #include <vector>
 
-template <class A>
 class HyperEdge_T {
 public:
-    typedef std::vector<int> vInt;
+    typedef std::vector<unsigned long> vUsLong_T;
 
     //****************** variables
-    int  targetNode;
-    vInt sourceNodes;
-    A    annotation;
+    unsigned long  targetNode;
+    vUsLong_T sourceNodes;
 
     //****************** methods
-    HyperEdge_T(const vInt &source, int target, const A &annotation);
 };
 
 

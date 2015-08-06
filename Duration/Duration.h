@@ -21,9 +21,9 @@ class Duration_T {
 protected:
     // used to make code more readable
     friend class Processing_T;
+public:
     TimeFraction_T duration;    //duration fraction
     std::string type;           //holds subclass type
-public:
     Duration_T() {};
 
     // this returns the duration in decimal form (will be used when creating basis)

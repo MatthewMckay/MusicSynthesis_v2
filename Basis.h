@@ -29,14 +29,13 @@ private:
     typedef std::set<int> IntSet_T;
     typedef std::set<Dur_T> DurSet_T;
     typedef std::set<TimeFraction_T> TFset_T;
-
-    VectSHPdur_T completeBasis;
     ToneSet_T tones;
     IntSet_T  octaves;
     DurSet_T  nDurations;
     TFset_T   rDurations;
 
 public:
+    VectSHPdur_T completeBasis;
     void InputElem(SHP_T(Duration_T) elem);
     void MakeBasis();
     void sizes(){
