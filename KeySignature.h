@@ -36,25 +36,27 @@ private:
 
     CAStr_T keySignature;       //holds order of pitches with accidentals
     std::string keyMode;        //major / minor
-    std::vector<std::vector<std::string>> chordPitches;     //holds pitches and there order contained in each diatonic chord
     int adjuster;       //keysignature is in a cyclicArray, this used to descramble so "X" - 'a' works
-
-    int currentChord;   //when synthesizing this holds the last chord used to help determine next appropriate chord/note
 
     void Simplify(std::string &str) const;  //modifies a pitch to its simplified equivalent \
                                             // ie. Bs = C : Aff = G : Dsf = D : Fs = Fs
-    const std::vector<int> GetNextPossibleChords();     //returns possible chords based on common chord progression theory
 
 public:
+
+    int currentChord;   //when synthesizing this holds the last chord used to help determine next appropriate chord/note
+    std::vector<std::vector<std::string>> chordPitches;     //holds pitches and there order contained in each diatonic chord
+
     KeySignature_T(){};
     KeySignature_T(std::string keySig, std::string mode); //sets keySignature, keyMode, adjuster, and chordPitches
 
     void Initialize(std::string keySig, std::string mode);
 
+    const std::vector<int> GetNextPossibleChords();     //returns possible chords based on common chord progression theory
+
     const int AdjustedI(int i) const;   //returns an unscrambled index
     void  DetermineCurrentChord(const std::string &pitch);  //if starting chord is unknown, guess from used notes
-    std::vector<std::string> GetTonesInCurrentChord() const;
-    const std::vector<std::string> GetNextPossibleNotes();  //returns a set of valid next notes to try
+    const std::vector<std::pair<short, std::string> > GetTonesInCurrentChord() const;
+    const std::vector<std::pair<short, std::string> > GetNextPossibleNotes();  //returns a set of valid next notes to try
 
     //this was made to tie this into the existing project
     const std::vector<std::string> GetKeySig(){

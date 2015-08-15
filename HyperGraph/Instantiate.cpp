@@ -6,80 +6,82 @@
 
 Instantiate_T::Instantiate_T(SHP_T(Fragment_T) f) : fragment(f) {
     //each bucket holds all notes of a certain pitch a-g or all rests
-    std::vector<int> bucket;
+    std::vector<unsigned int> bucket;
     for (int i = 0; i < 8; ++i) {
         intBasis.push_back(bucket);
     }
     //duration elements are really big, this converts them into an unsigned integer
     ConvertDurationBasisToInt();
     //this grabs the first note of the fragment
-    Note_T firstFragmentNote = *SPC_(Note_T)(fragment->seqFrag[0]);
-    //next we guess which chord the first note is in
-    fragment->DetermineCurrentChord(firstFragmentNote.GetPitch() + firstFragmentNote.GetAccidental());
-    //after we know what chord, we can make a list of possible notes
-    Deque_T<unsigned int> firstNotes;
-    for (auto tone : fragment->GetTonesInCurrentChord()) {
-        if (tone.size() > 1){
-            switch(tone[1]){
-                case 'n' : firstNotes += GetNotes(tone[0]-'a', 0, 1); break;
-                case 'f' : firstNotes += GetNotes(tone[0]-'a', 1, 2); break;
-                default  : firstNotes += GetNotes(tone[0]-'a', 2, 3);
+    short id = -1;
+    for (auto item : intBasis) {
+        for (auto subitem : item){
+            intToIDmap.insert( {subitem, ++id} );
+            graph.AddNode(subitem, id);
+        }
+    }
+
+    //gather appropriate elements for each chord
+    for (int i = 0; i < fragment->chordPitches.size(); ++i){
+        std::deque<std::bitset<MAX_ID_BIT_LENGTH> > bs;
+        idsPerChord.push_back(bs);
+        for (int k = 0; k < fragment->chordPitches[i]; ++k){
+            for (auto tone : fragment->chordPitches[i]){
+                for (auto note : GetNotes(tone)){
+                    idsPerChord.back().push_back(note);
+                }
+            }
+            for (auto rest : intBasis[7]){
+                idsPerChord.back().push_back(rest);
             }
         }
     }
-    //for each possible note make every possible sequence to the specified time depth
-    while (firstNotes.size()) {
-        TimeFraction_T tf, testLength;//tf holds the time of the next potential element, test length is a temporary way to limit time depth
-        testLength.numerator = 1;
-        testLength.denominator = 4;
-        tf.numerator = 1;
-        tf.denominator = Extract(firstNotes[0],DENOM);
-        //so long as adding the next element won't go over the desired time depth add the next element to the graph
-        if (graphDepth + tf <= testLength) {
-            graphDepth += tf;
-            currentSequence.push_back(firstNotes[0]);
-            localNodeIndex.push_back(graph.AddNode(currentSequence));
-            std::cout<<"\n\n\n";
-            Instantiate();//continue the sequence
-            graphDepth -= tf;
-            currentSequence.pop_back();
-            localNodeIndex.pop_back();
+
+    Note_T firstFragmentNote = *SPC_(Note_T)(fragment->seqFrag[0]);
+    //next we guess which chord the first note is in
+    fragment->DetermineCurrentChord(firstFragmentNote.GetPitch() + firstFragmentNote.GetAccidental());
+
+
+
+    for (auto item : idsPerChord[fragment->currentChord - 1]) {
+        if (Extract(item, elemPiece(e_elemType)) == 1) break;
+        else {
+            TimeFraction_T duration(1, 1);
+            duration.denominator = Extract(item, elemPiece(e_denominator));
+            int dots = Extract(item, elemPiece(e_dots));
+            DotModify(duration, dots);
+            if ( (graphDepth + duration) <= fragment->length ) {
+                graphDepth += duration;
+                nodeDepth = 0;
+                IntToShortID_T::iterator mapIt = intToIDmap.find(item);
+                Append(currentElemSequence, mapIt->second, MAX_ID_BIT_LENGTH, nodeDepth);
+                Instantiate();
+                graphDepth -= duration;
+            }
         }
-        firstNotes.pop_front();//Note is used, no longer need to keep track of it
     }
 }
 
 /*
  * retrieves all notes of the specified pitch and accidental
  */
-Deque_T<unsigned int> Instantiate_T::GetNotes(unsigned int pitch, const int &floor, const int& ceiling) {
-    Deque_T<unsigned int> notes;
-    int x = 0;
-    for (auto note : intBasis[pitch]) {
-        //all notes with the same accidental
-        if (note > (pitch * 10 + floor) * 10000000 && note < (pitch * 10 + ceiling) * 10000000) {
-            notes.push_back(note); x++;
+const std::vector<int> Instantiate_T::GetNotes(const std::string & pitch) {
+    std::vector<int> notes;
+    int pitchNum = pitch[0]-'a';
+    for (auto note : intBasis[pitchNum]) {
+        int8_t accidType;
+        switch(pitch[1]){
+            case 'f' : accidType = 2;
+                break;
+            case 's' : accidType = 3;
+            default  : accidType = 1;
+        }
+        if (Extract(note, elemPiece(e_accidental)) == accidType) {
+                notes.push_back(note);
         }
     }
     return notes;
 }
-
-/*
- *  Takes the more human readable Note and rest fields and combines them into 1 integer representation
- *         10 9 8 7 6 5 4 3 2 1
- *  Notes:  X X X X X X X X X X
- *            X | | | |       | => Pitch 0 = 'A' -> 6 ='G'
- *              X | | |       | => Accidental 0 ='n'  1='f'  2='s'
- *                X | |       | => Octave 0 -> 9
- *                  X |       | => Dots 0 -> 9
- *                    X X X X | => Duration denominator 2^n -> 2^0 -> 2^10
- *                            X => 0 = Note
- *         10 9 8 7 6 5 4 3 2 1
- *  Rests:  X X X X X X X X X X
- *          X X X X X |       | => Duration numerator
- *                    X X X X | => Duration denominator
- *                            X => 1 = Rest
- */
 #include <iomanip>
 /*
  * converts all duration elements in the basis to an integer
@@ -92,12 +94,12 @@ void Instantiate_T::ConvertDurationBasisToInt() {
             intRep = ConvertNoteToInt(note);
 
             //puts each "pitched" note into its own bucket
-            if (intRep < 100000000) intBasis[0].push_back(intRep);
-            else if (intRep < 200000000) intBasis[1].push_back(intRep);
-            else if (intRep < 300000000) intBasis[2].push_back(intRep);
-            else if (intRep < 400000000) intBasis[3].push_back(intRep);
-            else if (intRep < 500000000) intBasis[4].push_back(intRep);
-            else if (intRep < 600000000) intBasis[5].push_back(intRep);
+            if (note.GetPitch() == 'a')  intBasis[0].push_back(intRep);
+            else if (note.GetPitch() == 'b') intBasis[1].push_back(intRep);
+            else if (note.GetPitch() == 'c') intBasis[2].push_back(intRep);
+            else if (note.GetPitch() == 'd') intBasis[3].push_back(intRep);
+            else if (note.GetPitch() == 'e') intBasis[4].push_back(intRep);
+            else if (note.GetPitch() == 'f') intBasis[5].push_back(intRep);
             else intBasis[6].push_back(intRep);
         }
         else intBasis[7].push_back( ConvertRestToInt(*item) );
@@ -113,95 +115,103 @@ void Instantiate_T::ConvertDurationBasisToInt() {
 /*
  * converts notes to integers
  */
-unsigned int Instantiate_T::ConvertNoteToInt(const Note_T &note) {
-    unsigned int intRep = 0;
-    intRep += note.ReverseDotModify().denominator * 10//duration
-              + note.GetDots() * 100000               //dots
-              + note.GetOctave() * 1000000            //octave
-              + (tolower(note.GetPitch()) - 'a') * 100000000;//pitch
-    switch(note.GetAccidental()[0]) {//accidental
-        case 'n' :
+int Instantiate_T::ConvertNoteToInt(const Note_T &note) {
+    int noteRep = 0;
+    noteRep += ( (note.GetPitch() - 'a') << PITCH_POS )
+               +  ( note.GetOctave()   << OCTAV_POS )
+               +  ( note.GetDots()     << DOTS_POS )
+               +  ( note.ReverseDotModify().denominator << DENOM_POS );
+    switch (note.GetAccidental()[0]){
+        case 'f': noteRep += 32768;
             break;
-        case 'f' :
-            intRep += 10000000;
+        case 's': noteRep += 49152;
             break;
-        case 's' :
-            intRep += 20000000;
-            break;
-        default  :;
+        default : noteRep += 16384;
     }
-    return intRep;
+    return noteRep
 }
 
 /*
  * converts rests to integers
  */
-unsigned int Instantiate_T::ConvertRestToInt(const Duration_T &rest) {
-    return 1 + (unsigned)rest.duration.denominator * 10 + (unsigned)rest.duration.numerator * 100000;
+int Instantiate_T::ConvertRestToInt(const Duration_T &rest) {
+    int restRep = 1;
+    restRep += ( rest.duration.denominator << DENOM_POS )
+               +  ( rest.duration.numerator   << NUMER_POS );
+    return restRep;
 }
 
 /*
  * builds the hypergraph
  */
 void Instantiate_T::Instantiate() {
-    Deque_T<unsigned int> possibleElements;//holds possible next elements
-    //gets next possible elements from the key signature object associated with the fragment then from buckets
-    for (auto tone: fragment->GetNextPossibleNotes()){
-        if (tone.size() > 1){
-            switch(tone[1]){
-                case 'n' : possibleElements += GetNotes(tone[0]-'a', 0, 1); break;
-                case 'f' : possibleElements += GetNotes(tone[0]-'a', 1, 2); break;
-                default  : possibleElements += GetNotes(tone[0]-'a', 2, 3);
+    int8_t previousChord = fragment->currentChord;
+    int  nextChords = 0;
+    std::vector<int> * temp = new std::vector<int>;
+    *temp = fragment->GetNextPossibleChords();
+    for (int i = 0; i < temp->size(); ++i){
+        nextChords += ( (*temp)[i] << (3 * i) );
+    }
+    delete temp;
+
+    int8_t nextChord;
+    while (nextChords & 7){
+        nextChord = nextChords & 7;
+        nextChords >>= 3;
+        fragment->currentChord = nextChord;
+        for (auto item : idsPerChord[nextChord - 1]) {
+            TimeFraction_T duration(1, 1);
+            duration.denominator = Extract(item, elemPiece(e_denominator));
+            int dots = Extract(item, elemPiece(e_dots));
+            DotModify(duration, dots);
+            if ( (graphDepth + duration) <= fragment->length ) {
+                graphDepth += duration;
+                nodeDepth++;
+                IntToShortID_T::iterator mapIt = intToIDmap.find(item);
+                Append(currentElemSequence, mapIt->second, MAX_ID_BIT_LENGTH, nodeDepth);
+                Instantiate();
+                graphDepth -= duration;
+                nodeDepth--;
             }
         }
     }
+}
 
-    unsigned long localParentIndex = localNodeIndex.back(); //keeps track of parent node
-    //while there are still elements to try continue building graph
-    while (possibleElements.size()){
-        TimeFraction_T tf, testLength;
-        testLength.numerator = 1;
-        testLength.denominator = 4;
-        //if a note
-        if (Extract(possibleElements[0],0,1) == 0) {
-            tf.numerator = 1;
-            tf.denominator = Extract(possibleElements[0],DENOM);
-            //as long as adding the next element won't exceed the time specified
-            if (graphDepth + tf <= testLength){
-                graphDepth += tf; //delete time taken by new element
-                currentSequence.push_back(possibleElements[0]);
-                localNodeIndex.push_back(graph.AddNode(currentSequence));
-
-                //add the edge between parent and child to both the parent and child nodes
-                graph.vertices[localParentIndex].AddEdge({localParentIndex}, localNodeIndex.back());
-                graph.vertices[localNodeIndex.back()].AddEdge({localParentIndex}, localNodeIndex.back());
-                std::cout<<"\n\n";
-
-                Instantiate();//continue sequencing
-                currentSequence.pop_back();//the back no longer accurate
-                localNodeIndex.pop_back();//the back no longer accurate
-                graphDepth -= tf; //we came back to an earlier node, therefore time must be reverted
-            }
-        }
-        else {
-            tf.numerator = Extract(possibleElements[0],NUMER);
-            tf.denominator = Extract(possibleElements[0],DENOM);
-            if (graphDepth + tf <= testLength){
-                graphDepth += tf; //delete time taken by new element
-                currentSequence.push_back(possibleElements[0]);
-                localNodeIndex.push_back(graph.AddNode(currentSequence));
-
-                //add the edge between parent and child to both the parent and child nodes
-                graph.vertices[localParentIndex].AddEdge({localParentIndex}, localNodeIndex.back());
-                graph.vertices[localNodeIndex.back()].AddEdge({localParentIndex}, localNodeIndex.back());
-                std::cout<<"\n\n";
-
-                Instantiate();//continue sequencing
-                currentSequence.pop_back();//the back no longer accurate
-                localNodeIndex.pop_back();//the back no longer accurate
-                graphDepth -= tf; //we came back to an earlier node, therefore time must be reverted
-            }
-        }
-        possibleElements.pop_front();//finished trying element, get rid of it and try the next one
+/**
+ * dots (number of dots n) modify the original duration (dur) with the following equation
+ * dur * (2 - (1 / (2^n))) == dur * ((2^(n+1)-1)/(2^n))
+ * TODO add check to avoid double modifications
+ */
+void Instantiate_T::DotModify(TimeFraction_T &duration, const int& dots ) {
+    if ( dots == 0 || duration.numerator > 1) return;
+    else{
+        duration.numerator = ( duration.numerator << ( dots + 1 ) ) - 1;
+        duration.denominator = duration.denominator << dots;
     }
+}
+
+void Instantiate_T::ExtractElementDuration(TimeFraction_T &duration, const unsigned int &element) {
+    if (Extract(element,1,1) == 0){
+        duration.denominator = Extract(element, DENOM);
+        int dots = Extract(element,DOTS);
+        DotModify(duration, dots);
+    }
+    else {
+        duration.numerator = Extract(element,NUMER);
+        duration.denominator = Extract(element,DENOM);
+    }
+}
+
+std::bitset<MAX_BIT_STRNG_LENGTH> Instantiate_T::SequenceToIDSequence() {
+    std::bitset<MAX_BIT_STRNG_LENGTH> sequence;
+    IntToShortID_T::iterator mapIt;
+    for (int i = 0; i < currentSequence.size()-1; ++i) {
+        mapIt = intToIDmap.find(currentSequence[i].second);
+        if (mapIt != intToIDmap.end()){
+            for (int k = 0; k < MAX_ID_BIT_LENGTH; ++k){
+                sequence[i * MAX_ID_BIT_LENGTH + k] = mapIt->second[k];
+            }
+        }
+    }
+    return sequence;
 }

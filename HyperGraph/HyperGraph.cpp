@@ -3,8 +3,8 @@
 //
 
 #include "HyperGraph.h"
-unsigned int HyperGraph_T::AddNode(const std::vector<unsigned int> &sequence){
-    HyperNode_T node(sequence);
+
+void HyperGraph_T::AddNode(const unsigned int &element, const std::bitset<MAX_ID_BIT_LENGTH> &id) {
+    HyperNode_T node(element, id);
     vertices.push_back(node);
-    return (unsigned int) vertices.size() - 1;
 }

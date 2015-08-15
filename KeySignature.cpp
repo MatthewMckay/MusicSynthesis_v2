@@ -274,7 +274,6 @@ void KeySignature_T::Simplify(std::string &str) const{
  * guess the current chord based on current pitch. integers represent chord I - VII
  */
 void KeySignature_T::DetermineCurrentChord(const std::string &pitch) {
-    std::cout<<pitch<<std::endl;
     int pitchNum = AdjustedI(pitch[0] - keySignature[0][0]) + 1;
     switch (pitchNum){
         case 1 : currentChord = 1; break;
@@ -286,14 +285,13 @@ void KeySignature_T::DetermineCurrentChord(const std::string &pitch) {
         case 7 : currentChord = 5; break;
         default: currentChord = 1;
     }
-    std::cout<<currentChord<<'\n';
 }
 
-std::vector<std::string> KeySignature_T::GetTonesInCurrentChord() const{
-    std::vector<std::string> rvals;
-    rvals = chordPitches[currentChord-1];
-    for (int i = 0; i < rvals.size(); ++i){
-        Simplify(rvals[i]);
+const std::vector<std::pair<short, std::string> > KeySignature_T::GetTonesInCurrentChord() const{
+    std::vector<std::pair<short, std::string> > rvals;
+    for (int i = 0; i < chordPitches[currentChord-1].size(); ++i){
+        rvals.push_back({currentChord, chordPitches[currentChord-1][i]});
+        Simplify(rvals[i].second);
     }
     return rvals;
 }
@@ -318,13 +316,13 @@ const std::vector<int> KeySignature_T::GetNextPossibleChords(){
         else {
             switch (currentChord){
                 case 1 : return {1,2,3,4,5,6,7};
-                case 2 : return {5,7};
-                case 3 : return {6};
+                case 2 : return {2,5,7};
+                case 3 : return {3,6};
                 case 4 : return {5,7,8};
-                case 5 : return {1};
-                case 6 : return {2,3};
-                case 7 : return {1};
-                case 8 : return {3}; //this is a special case for all minors. they have VII diminished and VII maj in its chord progression
+                case 5 : return {1,5};
+                case 6 : return {2,3,6};
+                case 7 : return {1,7};
+                case 8 : return {3,8}; //this is a special case for all minors. they have VII diminished and VII maj in its chord progression
                                         //case 7 is VII diminished and
                 default: return {1};
             }
@@ -336,22 +334,18 @@ const std::vector<int> KeySignature_T::GetNextPossibleChords(){
 /*
  * returns a list of valid, non-repeating, simplified pitches
  */
-const std::vector<std::string> KeySignature_T::GetNextPossibleNotes(){
-    std::set<std::string> pitches;
+const std::vector<std::pair<short, std::string> > KeySignature_T::GetNextPossibleNotes(){
+    std::vector<std::pair<short, std::string> > rVals;
     std::string adjustedPitch;
     int ct = 0, ct2 =0;
     for (auto chordNum : GetNextPossibleChords()){
         for (int pitch = 0; pitch < chordPitches[chordNum-1].size(); pitch++){
             adjustedPitch = chordPitches[chordNum-1][pitch];
             Simplify(adjustedPitch);
-            pitches.insert(adjustedPitch);
+            rVals.push_back({chordNum,adjustedPitch});
         }
     }
-    std::vector<std::string> rPitches;
-    for (auto pitch : pitches) {
-        rPitches.push_back(pitch);
-    }
-    return rPitches;
+    return rVals;
 }
 
 

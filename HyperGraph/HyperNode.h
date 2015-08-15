@@ -6,34 +6,20 @@
 #define MUSICSYNTHESIS_V2_HYPERNODE_H
 
 #include <iostream>
-#include <vector>
+#include <set>
 #include <initializer_list>
 
 #include "HyperEdge.h"
 
 class HyperNode_T {
 public:
-    HyperNode_T(const std::vector<unsigned int> &seq) : sequence(seq) {
-        int x = 5;
-        //std::cout<<sequence.size()<<'\n';
-        for (auto item : sequence) {
-            if (!x) {std::cout<<'\n'; x = 5;}
-            x--;
-            std::cout<<item<<'\t';
-        }
-    }
-    typedef std::vector<HyperEdge_T> VHyperE_T;
-    int    id;
-    VHyperE_T edges;
-    std::vector<unsigned int> sequence;
-
-    void AddEdge(const std::initializer_list<unsigned long> &antecedent, const unsigned long &consequent){
-        HyperEdge_T edge;
-        edge.sourceNodes = antecedent;
-        edge.targetNode = consequent;
-        edges.push_back(edge);
-        for (auto item : edge.sourceNodes) { std::cout<<item<<",";}
-        std::cout<<" -> "<<edge.targetNode<<"\t\t";
+    HyperNode_T(const unsigned int element, const std::bitset<MAX_ID_BIT_LENGTH> unique_id) : data(element), id(unique_id) {}
+    std::set<HyperEdge_T> edges;
+    unsigned int data;
+    std::bitset<MAX_ID_BIT_LENGTH> id;
+    void AddEdge(const std::bitset<MAX_BIT_STRNG_LENGTH> &edge){
+        HyperEdge_T newEdge(edge);
+        edges.insert(edge);
     }
 };
 

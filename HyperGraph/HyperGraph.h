@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <bitset>
 
 #include "../Constants.h"
 #include "HyperEdge.h"
@@ -38,8 +39,7 @@ public:
 
     typedef std::vector<HyperNode_T> VHyperN_T;
     VHyperN_T vertices;
-
-    unsigned int AddNode(const std::vector<unsigned int> &sequence);
+    void AddNode(const unsigned int &element, const std::bitset<MAX_ID_BIT_LENGTH> &id);
 };
 
 

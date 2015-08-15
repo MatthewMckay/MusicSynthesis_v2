@@ -19,7 +19,6 @@ int main() {
     for (auto it = fragments.begin(); it != fragments.end(); ++it){
         (*it)->GenerateBasis();
         Instantiate_T instantiate_t(*it);
-        std::cout<<instantiate_t.graph.vertices.size()<<"\n\n";
     }
     std::cout << "\n\n************************\ntotal pointers = " << global_shpCt << '\n';
     return 0;
