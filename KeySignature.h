@@ -8,6 +8,7 @@
 #include <cstring>
 #include <string>
 #include <set>
+#include <list>
 
 #include "CyclicArray.h"
 
@@ -51,7 +52,7 @@ public:
 
     void Initialize(std::string keySig, std::string mode);
 
-    const std::vector<int> GetNextPossibleChords();     //returns possible chords based on common chord progression theory
+    const std::list<unsigned int> GetNextPossibleChords();     //returns possible chords based on common chord progression theory
 
     const int AdjustedI(int i) const;   //returns an unscrambled index
     void  DetermineCurrentChord(const std::string &pitch);  //if starting chord is unknown, guess from used notes

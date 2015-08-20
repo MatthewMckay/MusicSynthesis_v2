@@ -39,7 +39,7 @@ public:
 
     typedef std::vector<HyperNode_T> VHyperN_T;
     VHyperN_T vertices;
-    void AddNode(const unsigned int &element, const std::bitset<MAX_ID_BIT_LENGTH> &id);
+    void AddNode(const unsigned int &element, const short &id);
 };
 
 

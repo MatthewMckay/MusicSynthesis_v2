@@ -299,7 +299,7 @@ const std::vector<std::pair<short, std::string> > KeySignature_T::GetTonesInCurr
 /*
  * common chord progression theory, integers represent chords I - VII
  */
-const std::vector<int> KeySignature_T::GetNextPossibleChords(){
+const std::list<unsigned int> KeySignature_T::GetNextPossibleChords(){
     if (currentChord != -1) {
         if (keyMode == "major"){
             switch(currentChord){
@@ -328,7 +328,7 @@ const std::vector<int> KeySignature_T::GetNextPossibleChords(){
             }
         }
     }
-    return {-1};
+    return {0};
 }
 
 /*

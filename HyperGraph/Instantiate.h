@@ -13,9 +13,11 @@
 #include <cstdlib>
 
 #include "../Constants.h"
+#include "../BitWiseStack16_3.h"
+#include "../BitWise32int_3.h"
 #include "../Fragment.h"
 #include "HyperGraph.h"
-
+/*
 template <class T>
 class Vector_T : public std::vector<T> {
 public:
@@ -55,9 +57,9 @@ void Truncate(std::bitset<N1> &longer,const int& truncV, const int & bits, const
     temp <<= (bits * n);
     longer ^= temp;
 }
-
+*/
 typedef std::vector<std::vector<unsigned int> > IntBucketVect_T;
-typedef std::vector<std::deque<std::bitset<MAX_ID_BIT_LENGTH> > > VectDeqBits_T;
+typedef std::vector<std::deque<unsigned int> > VectDeqBits_T;
 typedef std::unordered_map<unsigned int, short> IntToShortID_T;
 
 class Instantiate_T {
@@ -87,7 +89,7 @@ private:
         e_numerator
     };
     //used to convert duration element integer back into its corresponding note/rest object
-    int Extract(const int &element, const elemPiece &ep){
+    int Extract(const unsigned int &element, const elemPiece &ep){
         switch (ep){
             case e_elemType:    return (element & TYPE_GRAB);
             case e_denominator: return ( (element & DENOM_GRAB) >> DENOM_POS );
@@ -103,9 +105,10 @@ private:
     IntBucketVect_T   intBasis;   //holds a smaller memory footprint of the original basis
     IntToShortID_T intToIDmap; //maps element to a unique local id;
     VectDeqBits_T     idsPerChord;
-    std::bitset<288>  currentChordSequence; //keeps track of most recently used sequence of notes
-    std::bitset<MAX_BIT_STRNG_LENGTH> currentElemSequence;
+    //BitWiseStack16_3  currentChordSequence; //keeps track of most recently used sequence of notes
+    BitWiseDeque64<u_int64_t, 13> currentElemSequence;
     TimeFraction_T    graphDepth;      //holds current time depth of graph
+    unsigned long long edgeCount;
     int nodeDepth;
     /*
      * first pass:
@@ -119,7 +122,7 @@ public:
     Instantiate_T(SHP_T(Fragment_T) f);
 
     void ConvertDurationBasisToInt();
-    const std::vector<int> GetNotes(const std::string &pitch);
+    const std::deque<unsigned int> GetNotes(const std::string &pitch);
     int ConvertNoteToInt(const Note_T &note);
     int ConvertRestToInt(const Duration_T &rest);
     std::bitset<MAX_BIT_STRNG_LENGTH> SequenceToIDSequence();

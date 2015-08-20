@@ -13,11 +13,11 @@
 
 class HyperNode_T {
 public:
-    HyperNode_T(const unsigned int element, const std::bitset<MAX_ID_BIT_LENGTH> unique_id) : data(element), id(unique_id) {}
+    HyperNode_T(const unsigned int element, const u_int16_t unique_id) : data(element), id(unique_id) {}
     std::set<HyperEdge_T> edges;
     unsigned int data;
-    std::bitset<MAX_ID_BIT_LENGTH> id;
-    void AddEdge(const std::bitset<MAX_BIT_STRNG_LENGTH> &edge){
+    u_int16_t id;
+    void AddEdge(const BitWiseDeque64<u_int64_t, 13> &edge){
         HyperEdge_T newEdge(edge);
         edges.insert(edge);
     }

@@ -5,6 +5,7 @@
 #include "Instantiate.h"
 
 Instantiate_T::Instantiate_T(SHP_T(Fragment_T) f) : fragment(f) {
+    edgeCount = 0;
     //each bucket holds all notes of a certain pitch a-g or all rests
     std::vector<unsigned int> bucket;
     for (int i = 0; i < 8; ++i) {
@@ -23,9 +24,9 @@ Instantiate_T::Instantiate_T(SHP_T(Fragment_T) f) : fragment(f) {
 
     //gather appropriate elements for each chord
     for (int i = 0; i < fragment->chordPitches.size(); ++i){
-        std::deque<std::bitset<MAX_ID_BIT_LENGTH> > bs;
+        std::deque<unsigned int> bs;
         idsPerChord.push_back(bs);
-        for (int k = 0; k < fragment->chordPitches[i]; ++k){
+        for (int k = 0; k < fragment->chordPitches[i].size(); ++k){
             for (auto tone : fragment->chordPitches[i]){
                 for (auto note : GetNotes(tone)){
                     idsPerChord.back().push_back(note);
@@ -46,27 +47,29 @@ Instantiate_T::Instantiate_T(SHP_T(Fragment_T) f) : fragment(f) {
     for (auto item : idsPerChord[fragment->currentChord - 1]) {
         if (Extract(item, elemPiece(e_elemType)) == 1) break;
         else {
-            TimeFraction_T duration(1, 1);
+            TimeFraction_T duration(1, 1), tf(1,4);
             duration.denominator = Extract(item, elemPiece(e_denominator));
             int dots = Extract(item, elemPiece(e_dots));
             DotModify(duration, dots);
-            if ( (graphDepth + duration) <= fragment->length ) {
+            if ( (graphDepth + duration) <= tf){//fragment->length ) {
                 graphDepth += duration;
                 nodeDepth = 0;
                 IntToShortID_T::iterator mapIt = intToIDmap.find(item);
-                Append(currentElemSequence, mapIt->second, MAX_ID_BIT_LENGTH, nodeDepth);
+                currentElemSequence.Append((u_int64_t)mapIt->second);
                 Instantiate();
                 graphDepth -= duration;
+                currentElemSequence.Truncate();
             }
         }
+        cout<<"next\n";
     }
 }
 
 /*
  * retrieves all notes of the specified pitch and accidental
  */
-const std::vector<int> Instantiate_T::GetNotes(const std::string & pitch) {
-    std::vector<int> notes;
+const std::deque<unsigned int> Instantiate_T::GetNotes(const std::string & pitch) {
+    std::deque<unsigned int> notes;
     int pitchNum = pitch[0]-'a';
     for (auto note : intBasis[pitchNum]) {
         int8_t accidType;
@@ -74,6 +77,7 @@ const std::vector<int> Instantiate_T::GetNotes(const std::string & pitch) {
             case 'f' : accidType = 2;
                 break;
             case 's' : accidType = 3;
+                break;
             default  : accidType = 1;
         }
         if (Extract(note, elemPiece(e_accidental)) == accidType) {
@@ -128,7 +132,7 @@ int Instantiate_T::ConvertNoteToInt(const Note_T &note) {
             break;
         default : noteRep += 16384;
     }
-    return noteRep
+    return noteRep;
 }
 
 /*
@@ -145,32 +149,29 @@ int Instantiate_T::ConvertRestToInt(const Duration_T &rest) {
  * builds the hypergraph
  */
 void Instantiate_T::Instantiate() {
+    edgeCount++;
+    if (edgeCount % 100000 == 0) cout << edgeCount<<endl;
     int8_t previousChord = fragment->currentChord;
-    int  nextChords = 0;
-    std::vector<int> * temp = new std::vector<int>;
-    *temp = fragment->GetNextPossibleChords();
-    for (int i = 0; i < temp->size(); ++i){
-        nextChords += ( (*temp)[i] << (3 * i) );
-    }
-    delete temp;
-
+    U_Int32_Stack nextChords(fragment->GetNextPossibleChords());
+//cout<<nextChords.intStack<<endl;
     int8_t nextChord;
-    while (nextChords & 7){
-        nextChord = nextChords & 7;
-        nextChords >>= 3;
+    while (nextChords.intStack){
+        nextChord = nextChords.Top();
+        nextChords.Pop();
         fragment->currentChord = nextChord;
         for (auto item : idsPerChord[nextChord - 1]) {
-            TimeFraction_T duration(1, 1);
+            TimeFraction_T duration(1, 1), tf(1,4);
             duration.denominator = Extract(item, elemPiece(e_denominator));
             int dots = Extract(item, elemPiece(e_dots));
             DotModify(duration, dots);
-            if ( (graphDepth + duration) <= fragment->length ) {
+            if ( (graphDepth + duration) <= tf){//fragment->length ) {
                 graphDepth += duration;
                 nodeDepth++;
                 IntToShortID_T::iterator mapIt = intToIDmap.find(item);
-                Append(currentElemSequence, mapIt->second, MAX_ID_BIT_LENGTH, nodeDepth);
+                currentElemSequence.Append(mapIt->second);
                 Instantiate();
                 graphDepth -= duration;
+                currentElemSequence.Truncate();
                 nodeDepth--;
             }
         }
@@ -190,7 +191,7 @@ void Instantiate_T::DotModify(TimeFraction_T &duration, const int& dots ) {
     }
 }
 
-void Instantiate_T::ExtractElementDuration(TimeFraction_T &duration, const unsigned int &element) {
+/*void Instantiate_T::ExtractElementDuration(TimeFraction_T &duration, const unsigned int &element) {
     if (Extract(element,1,1) == 0){
         duration.denominator = Extract(element, DENOM);
         int dots = Extract(element,DOTS);
@@ -200,9 +201,9 @@ void Instantiate_T::ExtractElementDuration(TimeFraction_T &duration, const unsig
         duration.numerator = Extract(element,NUMER);
         duration.denominator = Extract(element,DENOM);
     }
-}
+}*/
 
-std::bitset<MAX_BIT_STRNG_LENGTH> Instantiate_T::SequenceToIDSequence() {
+/*std::bitset<MAX_BIT_STRNG_LENGTH> Instantiate_T::SequenceToIDSequence() {
     std::bitset<MAX_BIT_STRNG_LENGTH> sequence;
     IntToShortID_T::iterator mapIt;
     for (int i = 0; i < currentSequence.size()-1; ++i) {
@@ -214,4 +215,4 @@ std::bitset<MAX_BIT_STRNG_LENGTH> Instantiate_T::SequenceToIDSequence() {
         }
     }
     return sequence;
-}
+}*/

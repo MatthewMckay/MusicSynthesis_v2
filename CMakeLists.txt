@@ -22,7 +22,8 @@ if(Boost_FOUND)
     Element/Music.h Element/ScoreDefinition.h Element/Section.h Element/StaffDefinition.h Element/Staff.h
     Duration/TimeFraction.h Globals.cpp Globals.h HyperGraph/HyperEdge.h HyperGraph/HyperEdge.cpp
     HyperGraph/HyperNode.h HyperGraph/HyperNode.cpp HyperGraph/HyperGraph.h HyperGraph/HyperGraph.cpp
-    CyclicArray.h KeySignature.h KeySignature.cpp HyperGraph/Instantiate.h HyperGraph/Instantiate.cpp)
+    CyclicArray.h KeySignature.h KeySignature.cpp HyperGraph/Instantiate.h HyperGraph/Instantiate.cpp
+    BitWiseDeque64.h BitWiseStack16_3.h BitWise32int_3.h)
     target_link_libraries(MusicSynthesis_v2 /usr/local/lib/libxerces-c.dylib ${Boost_FILESYSTEM_LIBRARY})
 endif()
 
