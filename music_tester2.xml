@@ -369,15 +369,15 @@
                             <staff n="1">
                                 <layer n="1">
                                     <beam>
-                                        <note xml:id="d16531e143" pname="c" oct="5" dur="8"/>
-                                        <note xml:id="d16531e159" pname="d" oct="5" dur="8"/>
+                                        <note xml:id="d16531e143" pname="c" oct="5" dur="8" chordProg="1"/>
+                                        <note xml:id="d16531e159" pname="d" oct="5" dur="8" chordProg="5"/>
                                     </beam>
-                                    <note xml:id="d16531e175" pname="e" oct="5" dur="4"/>
+                                    <note xml:id="d16531e175" pname="e" oct="5" dur="4" chordProg="1"/>
                                     <beam>
-                                        <note xml:id="d16531e189" pname="e" oct="5" dur="8"/>
-                                        <note xml:id="d16531e205" pname="f" oct="5" dur="8"/>
+                                        <note xml:id="d16531e189" pname="e" oct="5" dur="8" chordProg="1"/>
+                                        <note xml:id="d16531e205" pname="f" oct="5" dur="8" chordProg="4"/>
                                     </beam>
-                                    <note xml:id="d16531e221" pname="g" oct="5" dur="4"/>
+                                    <note xml:id="d16531e221" pname="g" oct="5" dur="4" chordProg="5"/>
                                 </layer>
                             </staff>
                             <dir tstamp="1" place="above" staff="1">
@@ -396,13 +396,13 @@
                             <staff n="1">
                                 <layer n="1">
                                     <beam>
-                                        <note xml:id="d16531e572" pname="c" oct="5" dur="8"/>
-                                        <note xml:id="d16531e590" pname="d" oct="5" dur="8"/>
-                                        <note xml:id="d16531e608" pname="e" oct="5" dur="8"/>
-                                        <note xml:id="d16531e624" pname="f" oct="5" dur="8"/>
+                                        <note xml:id="d16531e572" pname="c" oct="5" dur="8" chordProg="1"/>
+                                        <note xml:id="d16531e590" pname="d" oct="5" dur="8" chordProg="5"/>
+                                        <note xml:id="d16531e608" pname="e" oct="5" dur="8" chordProg="1"/>
+                                        <note xml:id="d16531e624" pname="f" oct="5" dur="8" chordProg="4"/>
                                     </beam>
-                                    <note xml:id="d16531e640" pname="g" oct="5" dur="4"/>
-                                    <note xml:id="d16531e654" pname="g" oct="4" dur="4"/>
+                                    <note xml:id="d16531e640" pname="g" oct="5" dur="4" chordProg="5"/>
+                                    <note xml:id="d16531e654" pname="g" oct="4" dur="4" chordProg="1"/>
                                 </layer>
                             </staff>
                             <slur tstamp="1"
@@ -416,15 +416,15 @@
                             <staff n="1">
                                 <layer n="1">
                                     <beam>
-                                        <note xml:id="d16531e912" pname="a" oct="4" dur="8"/>
-                                        <note xml:id="d16531e928" pname="b" oct="4" dur="8"/>
+                                        <note xml:id="d16531e912" pname="a" oct="4" dur="8" chordProg="2"/>
+                                        <note xml:id="d16531e928" pname="b" oct="4" dur="8" chordProg="7"/>
                                     </beam>
-                                    <note xml:id="d16531e944" pname="c" oct="5" dur="4"/>
+                                    <note xml:id="d16531e944" pname="c" oct="5" dur="4" chordProg="1"/>
                                     <beam>
-                                        <note xml:id="d16531e958" pname="c" oct="5" dur="8"/>
-                                        <note xml:id="d16531e976" pname="d" oct="5" dur="8"/>
-                                        <note xml:id="d16531e994" pname="e" oct="5" dur="8"/>
-                                        <note xml:id="d16531e1010" pname="f" oct="5" dur="8"/>
+                                        <note xml:id="d16531e958" pname="c" oct="5" dur="8" chordProg="1"/>
+                                        <note xml:id="d16531e976" pname="d" oct="5" dur="8" chordProg="5"/>
+                                        <note xml:id="d16531e994" pname="e" oct="5" dur="8" chordProg="1"/>
+                                        <note xml:id="d16531e1010" pname="f" oct="5" dur="8" chordProg="4"/>
                                     </beam>
                                 </layer>
                             </staff>

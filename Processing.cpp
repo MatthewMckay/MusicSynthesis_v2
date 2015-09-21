@@ -278,6 +278,8 @@ SHP_T(Note_T) Processing_T::AddChordNote(TimeFraction_T &chordDur, int &chordDot
         if (!GEA_E("pname"))note->pitch = GEA("pname")[0];
         else throw "ERR: All notes must have a pitch";
 
+        if(!GEA_E("chordProg")){note->chordProg = std::stoi(GEA("chordProg"));}
+
         //set the octave
         if (!GEA_E("oct")) note->octave = std::stoi(GEA("oct"));
         else throw "ERR: Notes must have octave";
@@ -357,6 +359,9 @@ void Processing_T::CreateNote() {
         //set pitch
         if (!GEA_E("pname"))note->pitch = GEA("pname")[0];
         else throw "ERR: All notes must have a pitch";
+
+        if(!GEA_E("chordProg"))note->chordProg = std::stoi(GEA("chordProg"));
+        else std::cout<<"no chord!\n";
 
         //set octave
         if (!GEA_E("oct")) note->octave = std::stoi(GEA("oct"));

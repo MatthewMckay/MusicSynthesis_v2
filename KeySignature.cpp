@@ -298,23 +298,36 @@ const std::vector<std::pair<short, std::string> > KeySignature_T::GetTonesInCurr
 
 /*
  * common chord progression theory, integers represent chords I - VII
+ * 20 19 18 | 17 16 15 | 14 13 12 | 11 10 9 | 8 7 6 | 5 4 3 | 2 1 0
+ *  X  X  X |  X  X    |  X     X |  X      |   X X |   X   |     X
+ *  1835008 |  196608  |  20480   |  2048   |   192 |   16  |     1
  */
-const std::list<unsigned int> KeySignature_T::GetNextPossibleChords(){
-    if (currentChord != -1) {
-        if (keyMode == "major"){
-            switch(currentChord){
-                case 1 : return {1,2,3,4,5,6,7};
-                case 2 : return {2,5,7};
-                case 3 : return {3,6};
-                case 4 : return {4,5,7};
-                case 5 : return {1,5};
-                case 6 : return {2,4,6};
-                case 7 : return {1,3,7};
-                default: return {1};
+unsigned int KeySignature_T::GetNextPossibleChords(const int lastChord){
+    std::cout<<"getting chords\n";
+    if (lastChord != -1) {
+        if (keyMode == "major") {
+            switch (lastChord) {
+                case 1 :
+                    return 1+(2<<3)+(3<<6)+(4<<9)+(5<<12)+(6<<15)+(7<<18);
+                case 2 :
+                    return (2<<3)+(4<<9)+(5<<12)+(7<<18);//2,4,5,7
+                case 3 :
+                    return (3<<6)+(6<<15);//3,6
+                case 4 :
+                    return (2<<3)+(4<<9)+(5<<12)+(7<<18);//2,4,5,7
+                case 5 :
+                    return 1+(5<<12)+(7<<18);//1,5,7
+                case 6 :
+                    return (2<<3)+(4<<9)+(6<<15);//2,4,6
+                case 7 :
+                    return 1+(5<<12)+(7<<18);//1,5,7
+                default:
+                    return 1;
             }
         }
-        else {
-            switch (currentChord){
+    }
+        /*else {
+            switch (lastChord){
                 case 1 : return {1,2,3,4,5,6,7};
                 case 2 : return {2,5,7};
                 case 3 : return {3,6};
@@ -326,24 +339,33 @@ const std::list<unsigned int> KeySignature_T::GetNextPossibleChords(){
                                         //case 7 is VII diminished and
                 default: return {1};
             }
+        }*/
+    return 0;
+}
+unsigned int KeySignature_T::GetPreviousPossibleChords(const int nextChord){
+    if (keyMode == "major"){
+        std::cout<<"nextChord: "<<nextChord<<std::endl;
+        switch(nextChord){
+            case 1 : return 1+(2<<3)+(3<<6)+(4<<9)+(5<<12)+(6<<15)+(7<<18);
+            case 2 : return 1+(2<<3)+(4<<9)+(6<<15);//1,2,4,6
+            case 3 : return 1+(3<<6)+(7<<18);//1,3,7
+            case 4 : return 1+(2<<3)+(4<<9)+(6<<15);//1,2,4,6
+            case 5 : return 1+(2<<3)+(4<<9)+(5<<12)+(7<<18);
+            case 6 : return 1+(3<<6)+(7<<18);//1,3,7
+            case 7 : return 1+(2<<3)+(4<<9)+(5<<12)+(7<<18);//1,2,4,5,7
+            default: return 1;
         }
     }
-    return {0};
 }
 
 /*
  * returns a list of valid, non-repeating, simplified pitches
  */
-const std::vector<std::pair<short, std::string> > KeySignature_T::GetNextPossibleNotes(){
-    std::vector<std::pair<short, std::string> > rVals;
-    std::string adjustedPitch;
-    int ct = 0, ct2 =0;
-    for (auto chordNum : GetNextPossibleChords()){
-        for (int pitch = 0; pitch < chordPitches[chordNum-1].size(); pitch++){
-            adjustedPitch = chordPitches[chordNum-1][pitch];
-            Simplify(adjustedPitch);
-            rVals.push_back({chordNum,adjustedPitch});
-        }
+const std::vector<int> KeySignature_T::GetNextPossibleNotes(const int chord){
+    std::vector<int> diat_chords = DiatonicChords_C[chord-1];
+    std::vector<int> rVals;
+    for (auto item : diat_chords) {
+        rVals.push_back(tolower(keySignature[item][0])-'a');
     }
     return rVals;
 }

@@ -22,6 +22,7 @@ public:
     //reference in order to cast the pointer back to its original type. all Rest_T have type = "rest"
     Rest_T(){type = "rest";}
     virtual void SetDuration(int d); //sets the denominator of the time fraction and changes the numerator to 1
+    void SetDuration(const int n, const int d){duration.numerator = n; duration.denominator = d;}
     void SetDuration(TimeFraction_T tf);
 
     friend std::ostream& operator<< (std::ostream& ostr, const Rest_T & rest);

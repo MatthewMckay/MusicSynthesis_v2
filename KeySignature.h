@@ -52,12 +52,13 @@ public:
 
     void Initialize(std::string keySig, std::string mode);
 
-    const std::list<unsigned int> GetNextPossibleChords();     //returns possible chords based on common chord progression theory
+    unsigned int GetNextPossibleChords(const int lastChord);     //returns possible chords based on common chord progression theory
+    unsigned int GetPreviousPossibleChords(const int nextChord);
 
     const int AdjustedI(int i) const;   //returns an unscrambled index
     void  DetermineCurrentChord(const std::string &pitch);  //if starting chord is unknown, guess from used notes
     const std::vector<std::pair<short, std::string> > GetTonesInCurrentChord() const;
-    const std::vector<std::pair<short, std::string> > GetNextPossibleNotes();  //returns a set of valid next notes to try
+    const std::vector<int> GetNextPossibleNotes(const int chord);  //returns a set of valid next notes to try
 
     //this was made to tie this into the existing project
     const std::vector<std::string> GetKeySig(){

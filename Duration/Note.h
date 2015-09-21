@@ -26,10 +26,11 @@ private:
     int octave;             //holds octave
     int dots;               //needed to reverse modify durations
 public:
+    int chordProg;
     //everything is zeroed to check for being set
     //Because all duration elements are casted to SHP(Duration_T) to preserve order, Duration_T has the field "type" to
     //reference in order to cast the pointer back to its original type. all Note_T have type = "note"
-    Note_T() : pitch('\0'), accidental(""), octave(0), dots(0){type = "note";}
+    Note_T() : pitch('\0'), accidental(""), octave(0), dots(0),chordProg(0){type = "note";}
     void SetDuration(int d);
     void DotModify(const int& dots);
     TimeFraction_T ReverseDotModify() const;
